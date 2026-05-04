@@ -1,0 +1,123 @@
+.story-root {
+  min-height: 100vh;
+  overflow: hidden;
+  background: #f6f6f4;
+  padding: 1.25rem;
+}
+
+.story-stage {
+  min-height: calc(100vh - 2.5rem);
+  display: grid;
+  align-content: center;
+  justify-items: center;
+  gap: 1.8rem;
+}
+
+.placeholder-stack {
+  position: relative;
+  width: min(62vw, 54vh);
+  aspect-ratio: 4 / 5;
+  margin: 0 auto;
+}
+
+.photo-placeholder {
+  position: absolute;
+  inset: 0;
+  background: #000;
+  border-radius: 2px;
+  box-shadow: 0 14px 20px rgba(0, 0, 0, 0.28);
+}
+
+.stacked-photo {
+  transform: translate(var(--stack-x), var(--stack-y)) rotate(var(--stack-rotate));
+  transition: transform 260ms var(--step-ease), opacity 220ms ease-out;
+  opacity: 0.98;
+}
+
+.current-photo {
+  transform: translate(0, 0) rotate(0deg);
+  animation: photoRise var(--step-ms) var(--step-ease) both;
+}
+
+.story-text {
+  margin-top: 1.6rem;
+  max-width: min(80vw, 780px);
+  text-align: center;
+  line-height: 1.45;
+  font-size: clamp(0.95rem, 1.9vw, 1.3rem);
+  color: #161616;
+}
+
+.typewriter {
+  overflow: hidden;
+  white-space: normal;
+  width: 0;
+  animation: typing var(--type-ms) steps(45, end) forwards;
+}
+
+.story-stage.highlight .typewriter {
+  white-space: normal;
+  border-right: none;
+  width: auto;
+  animation: fadeIn 160ms ease-out both;
+}
+
+.story-text.centered {
+  margin-top: 0;
+  min-height: 18vh;
+  display: grid;
+  place-items: center;
+}
+
+.story-stage.highlight {
+  place-items: center;
+}
+
+.story-stage.highlight .placeholder-stack {
+  position: absolute;
+}
+
+.placeholder-stack.fade-out {
+  animation: fadeOut var(--fade-ms) ease-out forwards;
+}
+
+.step-enter-up {
+  animation: enterUp var(--step-ms) var(--step-ease) both;
+}
+
+.step-enter-down {
+  animation: enterDown var(--step-ms) var(--step-ease) both;
+}
+
+@keyframes enterUp {
+  from { transform: translateY(100%); }
+  to { transform: translateY(0); }
+}
+
+@keyframes enterDown {
+  from { transform: translateY(-100%); }
+  to { transform: translateY(0); }
+}
+
+@keyframes typing {
+  from { width: 0; }
+  to { width: 100%; }
+}
+
+@keyframes fadeOut {
+  to { opacity: 0; visibility: hidden; }
+}
+
+@keyframes fadeIn {
+  from { opacity: 0; }
+  to { opacity: 1; }
+}
+
+@keyframes photoRise {
+  from {
+    transform: translateY(120vh) rotate(0deg);
+  }
+  to {
+    transform: translateY(0) rotate(0deg);
+  }
+}
