@@ -1,4 +1,4 @@
-﻿import { render, screen } from '@testing-library/react'
+import { render, screen } from '@testing-library/react'
 import { MemoryRouter } from 'react-router-dom'
 import { describe, expect, it } from 'vitest'
 import { AppRoutes } from '../../src/routing/storyRoutes'
@@ -13,8 +13,8 @@ function renderAt(path: string) {
 
 describe('story page rendering', () => {
   it('renders generic slug-driven story page', async () => {
-    renderAt('/en/story/who-are-you')
-    expect(await screen.findByTestId('story-page')).toHaveAttribute('data-slug', 'who-are-you')
+    renderAt('/en/story/ready-wall-of-shame')
+    expect(await screen.findByTestId('story-page')).toHaveAttribute('data-slug', 'ready-wall-of-shame')
   })
 
   it('renders localized slug routes in both languages', async () => {
@@ -45,4 +45,3 @@ describe('story page rendering', () => {
     }
   })
 })
-

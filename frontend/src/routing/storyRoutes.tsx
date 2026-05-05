@@ -1,5 +1,5 @@
 import { useRef } from 'react'
-import { Link, Navigate, Route, Routes, useLocation, useNavigate, useParams } from 'react-router-dom'
+import { Navigate, Route, Routes, useLocation, useNavigate, useParams } from 'react-router-dom'
 import StoryPage from '../pages/StoryPage'
 import { STORY_COOLDOWN_MS, firstStoryPath } from '../config/storyInputs'
 import type { Lang } from '../config/storySequence'
@@ -28,22 +28,23 @@ function LanguageSelect() {
 
   return (
     <main style={{ minHeight: '100vh', display: 'grid', placeItems: 'center' }}>
-      <section style={{ display: 'grid', gap: 16 }}>
-        <div style={{ display: 'flex', gap: 12, justifyContent: 'center' }}>
+      <section style={{ display: 'grid' }}>
+        <div style={{ display: 'flex', gap: 16, justifyContent: 'center', alignItems: 'center' }}>
         <button type="button" aria-label="English" onClick={() => navigate(firstStoryPath('en'))}>
-          EN
+          <img
+            src="/images/flags/uk.png"
+            alt="UK flag"
+            style={{ width: 72, height: 48, objectFit: 'cover', display: 'block' }}
+          />
         </button>
         <button type="button" aria-label="Italiano" onClick={() => navigate(firstStoryPath('it'))}>
-          IT
+          <img
+            src="/images/flags/italy.png"
+            alt="Italy flag"
+            style={{ width: 72, height: 48, objectFit: 'cover', display: 'block' }}
+          />
         </button>
         </div>
-        <nav aria-label="Wedding pages" style={{ display: 'grid', gap: 8, justifyItems: 'center' }}>
-          {placeholderRoutes.map((route) => (
-            <Link key={route.path} to={route.path}>
-              {route.title}
-            </Link>
-          ))}
-        </nav>
       </section>
     </main>
   )

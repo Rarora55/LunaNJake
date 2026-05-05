@@ -9,6 +9,6 @@ describe('visual tokens', () => {
 
   it('keeps visual token palette available for active temporary steps', () => {
     expect(Object.keys(STORY_VISUAL_TOKENS)).toHaveLength(10)
-    expect(STORY_SEQUENCE).toHaveLength(8)
+    expect(STORY_SEQUENCE).toHaveLength(6)
   })
 })

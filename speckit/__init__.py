@@ -50,3 +50,14 @@ from .analysis import (
     SpectrumResult,
 )
 from .plotting import default_rc
+
+from .dev_visual_mappings import (
+    PAGE_COLOR_MAPPINGS,
+    STORY_STEP_VISUAL_MAPPINGS,
+    TEMPORARY_VISUAL_MODE,
+    get_route_color,
+    get_story_step_color,
+    validate_page_color_mappings,
+    validate_story_step_mappings,
+)
+

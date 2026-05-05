@@ -18,6 +18,41 @@ function resolveDirectionFromKey(key: string): 'forward' | 'backward' | null {
   return null
 }
 
+const STORY_IMAGE_BY_SLUG: Record<string, string> = {
+  'the-first-time': '/images/story/stintro.png',
+  'it-was-10-am': '/images/story/st1.png',
+  'facing-the-morning': '/images/story/st2.png',
+  'ready-wall-of-shame': '/images/story/st3.png',
+  'your-new-flatmate': '/images/story/st4.png',
+}
+
+type StackTransform = { x: number; y: number; rotate: number }
+
+function hashSlug(slug: string): number {
+  let hash = 0
+  for (let i = 0; i < slug.length; i += 1) {
+    hash = (hash * 31 + slug.charCodeAt(i)) >>> 0
+  }
+  return hash
+}
+
+function buildStableTransform(slug: string): StackTransform {
+  const hash = hashSlug(slug)
+  return {
+    x: (hash % 23) - 11,
+    y: ((Math.floor(hash / 17) % 17) - 8) + 10,
+    rotate: ((Math.floor(hash / 47) % 9) - 4) * 1.1,
+  }
+}
+
+const STACK_TRANSFORMS_BY_SLUG: Record<string, StackTransform> = STORY_SEQUENCE.reduce<Record<string, StackTransform>>(
+  (acc, item) => {
+    acc[item.slug] = buildStableTransform(item.slug)
+    return acc
+  },
+  {},
+)
+
 export default function StoryPage() {
   const { lang, slug } = useParams<{ lang: string; slug: string }>()
   const navigate = useNavigate()
@@ -37,13 +72,6 @@ export default function StoryPage() {
   const typeChars = Math.max(1, Math.ceil(storyText.length))
 
   const isHighlight = entry.displayMode === 'highlight'
-
-  const stackTransforms = [
-    { x: -18, y: 14, rotate: -3 },
-    { x: 16, y: 10, rotate: 2 },
-    { x: -10, y: 18, rotate: 4 },
-    { x: 12, y: 16, rotate: -2 },
-  ] as const
 
   const captionedVisible = STORY_SEQUENCE.filter((item, idx) => idx <= activeIndex && item.displayMode === 'captioned')
 
@@ -101,10 +129,12 @@ export default function StoryPage() {
           {captionedVisible.map((item, idx) => {
             const isCurrent = idx === captionedVisible.length - 1 && !isHighlight
             const depthFromTop = captionedVisible.length - 1 - idx
-            const transformToken = stackTransforms[depthFromTop % stackTransforms.length]
-            const x = isCurrent ? 0 : transformToken.x
-            const y = isCurrent ? 0 : transformToken.y
-            const rotate = isCurrent ? 0 : transformToken.rotate
+            const transformToken = STACK_TRANSFORMS_BY_SLUG[item.slug] ?? { x: 0, y: 8, rotate: 0 }
+            const depthFactor = Math.min(1.7, 0.9 + depthFromTop * 0.24)
+            const rotateFactor = Math.min(1.85, 1 + depthFromTop * 0.2)
+            const x = isCurrent ? 0 : Math.round(transformToken.x * depthFactor)
+            const y = isCurrent ? 0 : Math.round(transformToken.y * depthFactor)
+            const rotate = isCurrent ? 0 : transformToken.rotate * rotateFactor
             return (
               <div
                 key={item.slug}
@@ -118,7 +148,9 @@ export default function StoryPage() {
                     '--stack-rotate': `${rotate}deg`,
                   } as CSSProperties
                 }
-              />
+              >
+                <img src={STORY_IMAGE_BY_SLUG[item.slug]} alt="" className="story-photo" loading="eager" />
+              </div>
             )
           })}
         </div>

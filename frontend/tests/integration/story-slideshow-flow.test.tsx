@@ -13,7 +13,7 @@ function renderAt(path: string) {
 }
 
 describe('story slideshow flow', () => {
-  it('moves through 10-step order one step at a time', async () => {
+  it('moves through 6-step order one step at a time', async () => {
     const now = vi.spyOn(Date, 'now')
     let current = 1000
     now.mockImplementation(() => current)
@@ -21,9 +21,7 @@ describe('story slideshow flow', () => {
     const ordered = [
       'it-was-10-am',
       'facing-the-morning',
-      'flatmates',
       'ready-wall-of-shame',
-      'who-are-you',
       'your-new-flatmate',
       'she-was-not-wrong',
     ]

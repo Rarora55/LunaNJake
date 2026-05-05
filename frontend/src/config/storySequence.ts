@@ -12,12 +12,10 @@ export type StoryRouteEntry = {
 export const STORY_SEQUENCE: readonly StoryRouteEntry[] = [
   { id: 's1', slug: 'the-first-time', translationKey: 'story.theFirstTime', displayMode: 'captioned', nextSlug: 'it-was-10-am', previousSlug: null },
   { id: 's2', slug: 'it-was-10-am', translationKey: 'story.itWas10Am', displayMode: 'captioned', nextSlug: 'facing-the-morning', previousSlug: 'the-first-time' },
-  { id: 's3', slug: 'facing-the-morning', translationKey: 'story.facingTheMorning', displayMode: 'captioned', nextSlug: 'flatmates', previousSlug: 'it-was-10-am' },
-  { id: 's4', slug: 'flatmates', translationKey: 'story.flatmates', displayMode: 'captioned', nextSlug: 'ready-wall-of-shame', previousSlug: 'facing-the-morning' },
-  { id: 's5', slug: 'ready-wall-of-shame', translationKey: 'story.readyWallOfShame', displayMode: 'captioned', nextSlug: 'who-are-you', previousSlug: 'flatmates' },
-  { id: 's6', slug: 'who-are-you', translationKey: 'story.whoAreYou', displayMode: 'captioned', nextSlug: 'your-new-flatmate', previousSlug: 'ready-wall-of-shame' },
-  { id: 's7', slug: 'your-new-flatmate', translationKey: 'story.yourNewFlatmate', displayMode: 'captioned', nextSlug: 'she-was-not-wrong', previousSlug: 'who-are-you' },
-  { id: 's8', slug: 'she-was-not-wrong', translationKey: 'story.sheWasNotWrong', displayMode: 'highlight', nextSlug: null, previousSlug: 'your-new-flatmate' },
+  { id: 's3', slug: 'facing-the-morning', translationKey: 'story.facingTheMorning', displayMode: 'captioned', nextSlug: 'ready-wall-of-shame', previousSlug: 'it-was-10-am' },
+  { id: 's4', slug: 'ready-wall-of-shame', translationKey: 'story.readyWallOfShame', displayMode: 'captioned', nextSlug: 'your-new-flatmate', previousSlug: 'facing-the-morning' },
+  { id: 's5', slug: 'your-new-flatmate', translationKey: 'story.yourNewFlatmate', displayMode: 'captioned', nextSlug: 'she-was-not-wrong', previousSlug: 'ready-wall-of-shame' },
+  { id: 's6', slug: 'she-was-not-wrong', translationKey: 'story.sheWasNotWrong', displayMode: 'highlight', nextSlug: null, previousSlug: 'your-new-flatmate' },
 ]
 
 export const STORY_SLUGS = STORY_SEQUENCE.map((s) => s.slug)
@@ -35,15 +33,13 @@ export function validateStorySequenceShape(): string[] {
     'the-first-time',
     'it-was-10-am',
     'facing-the-morning',
-    'flatmates',
     'ready-wall-of-shame',
-    'who-are-you',
     'your-new-flatmate',
     'she-was-not-wrong',
   ]
 
-  if (STORY_SEQUENCE.length !== 8) {
-    errors.push('Story sequence must contain exactly 8 entries')
+  if (STORY_SEQUENCE.length !== 6) {
+    errors.push('Story sequence must contain exactly 6 entries')
   }
 
   for (let i = 0; i < STORY_SEQUENCE.length; i += 1) {
