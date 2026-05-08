@@ -10,6 +10,12 @@ const STORY_TEXT = {
       yourNewFlatmate: 'and Luna replied, "your new flatmate".',
       sheWasNotWrong: 'She was not wrong...!',
     },
+    address: {
+      venue: "Pelham House, Saint Andrew's Lane, Lewes, UK",
+      bus: '11am Shuttle Bus',
+      ceremony: 'Ceremony and Reception',
+      brunch: 'TBA Post-Wedding Brunch',
+    },
   },
   it: {
     story: {
@@ -19,6 +25,12 @@ const STORY_TEXT = {
       readyWallOfShame: 'Pronta per la walk of shame, Jake le chiese "chi sei?"',
       yourNewFlatmate: 'e Luna rispose: "la tua nuova coinquilina".',
       sheWasNotWrong: 'Non aveva torto...!',
+    },
+    address: {
+      venue: "Pelham House, Saint Andrew's Lane, Lewes, UK",
+      bus: '11 Shuttle Bus',
+      ceremony: 'Cerimonia e Ricevimento',
+      brunch: 'Brunch post-matrimonio TBA',
     },
   },
 } as const
@@ -33,4 +45,14 @@ function translationKeyToField(key: string): StoryKey {
 export function resolveStoryText(lang: Lang, translationKey: string): string {
   const field = translationKeyToField(translationKey)
   return STORY_TEXT[lang].story[field]
+}
+
+type AddressKey = keyof (typeof STORY_TEXT)['en']['address']
+
+export function getAddressText(lang: Lang): string {
+  return STORY_TEXT[lang].address.venue
+}
+
+export function resolveAddressTimelineText(lang: Lang, key: AddressKey): string {
+  return STORY_TEXT[lang].address[key]
 }

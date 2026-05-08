@@ -28,13 +28,20 @@ describe('story page rendering', () => {
 
   it('renders all new placeholder routes', async () => {
     const routes = [
-      { path: '/address', title: 'Address' },
-      { path: '/coming-from-abroad', title: 'Coming from abroad?' },
-      { path: '/travelling-from-london', title: 'Travelling from London?' },
-      { path: '/where-to-stay', title: 'Where to stay' },
-      { path: '/message-to-the-guest', title: 'Message to the guest' },
-      { path: '/are-you-coming', title: 'Are you coming?' },
+      { path: '/en/coming-from-abroad', title: 'Coming from abroad?' },
+      { path: '/en/travelling-from-london', title: 'Travelling from London?' },
+      { path: '/en/where-to-stay', title: 'Where to stay' },
+      { path: '/en/message-to-the-guest', title: 'Message to the guest' },
+      { path: '/en/are-you-coming', title: 'Are you coming?' },
     ]
+
+    const addressIntro = renderAt('/en/address-intro')
+    expect(await screen.findByTestId('address-intro-page')).toBeInTheDocument()
+    addressIntro.unmount()
+
+    const address = renderAt('/en/address')
+    expect(await screen.findByTestId('address-timeline-page')).toBeInTheDocument()
+    address.unmount()
 
     for (const route of routes) {
       const view = renderAt(route.path)

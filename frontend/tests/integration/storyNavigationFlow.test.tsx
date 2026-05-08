@@ -34,9 +34,9 @@ describe('story navigation flow', () => {
 
     const terminal = screen.getByTestId('terminal-page')
     fireEvent.keyDown(terminal, { key: 'ArrowDown' })
-    expect(await screen.findByTestId('placeholder-page')).toHaveAttribute('data-page-title', 'Address')
+    expect(await screen.findByTestId('address-intro-page')).toBeInTheDocument()
 
-    const addressPage = screen.getByTestId('placeholder-page')
+    const addressPage = screen.getByTestId('address-intro-page')
     fireEvent.keyDown(addressPage, { key: 'ArrowUp' })
     expect(await screen.findByRole('heading')).toHaveTextContent('IT She Said Yes')
 
@@ -45,17 +45,23 @@ describe('story navigation flow', () => {
     expect(await screen.findByTestId('story-page')).toHaveAttribute('data-slug', 'she-was-not-wrong')
 
     second.unmount()
-    renderAt('/address')
+    renderAt('/en/address-intro')
     const now = vi.spyOn(Date, 'now')
     now.mockReturnValue(1000)
-    const standaloneAddress = await screen.findByTestId('placeholder-page')
-    fireEvent.keyDown(standaloneAddress, { key: 'ArrowDown' })
+    const standaloneAddress = await screen.findByTestId('address-intro-page')
+    for (let i = 0; i < 16; i += 1) {
+      fireEvent.keyDown(standaloneAddress, { key: 'PageDown' })
+    }
+    const timeline = await screen.findByTestId('address-timeline-page')
+    for (let i = 0; i < 16; i += 1) {
+      fireEvent.keyDown(timeline, { key: 'PageDown' })
+    }
     expect(await screen.findByTestId('placeholder-page')).toHaveAttribute('data-page-title', 'Coming from abroad?')
 
     now.mockReturnValue(1800)
     const abroadPage = screen.getByTestId('placeholder-page')
     fireEvent.keyDown(abroadPage, { key: 'ArrowUp' })
-    expect(await screen.findByTestId('placeholder-page')).toHaveAttribute('data-page-title', 'Address')
+    expect(await screen.findByTestId('address-timeline-page')).toBeInTheDocument()
     now.mockRestore()
   })
 
