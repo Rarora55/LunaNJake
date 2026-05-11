@@ -1,0 +1,132 @@
+.abroad-scene {
+  min-height: 100vh;
+  overflow: hidden;
+  position: relative;
+  background:
+    radial-gradient(circle at 50% 12%, #f4efe2 0%, #e7dbc3 44%, #d8c7a8 100%),
+    repeating-linear-gradient(0deg, rgba(0, 0, 0, 0.03) 0 1px, transparent 1px 5px);
+}
+
+.abroad-shell {
+  position: relative;
+  width: min(94vw, 980px);
+  height: 84vh;
+  margin: 8vh auto 0;
+}
+
+.abroad-connector-line {
+  position: absolute;
+  left: 50%;
+  top: 0;
+  width: 3px;
+  height: 30vh;
+  background: #111;
+  transform-origin: top center;
+}
+
+.abroad-map-frame-wrap {
+  position: absolute;
+  left: 50%;
+  top: 30vh;
+  transform: translateX(-50%);
+  width: min(52vw, 620px);
+  aspect-ratio: 1 / 1;
+}
+
+.abroad-map-frame-outline {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  overflow: visible;
+}
+
+.abroad-map-frame-outline rect {
+  fill: none;
+  stroke: #111;
+  stroke-width: 2;
+  stroke-linecap: round;
+  stroke-linejoin: round;
+}
+
+.abroad-map-inner {
+  position: absolute;
+  inset: clamp(14px, 2.2vw, 24px);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  overflow: hidden;
+}
+
+.abroad-map-image {
+  width: 92%;
+  height: 92%;
+  object-fit: contain;
+  object-position: center;
+  display: block;
+}
+
+.abroad-map-fallback {
+  margin: 0;
+  font-size: clamp(0.9rem, 1.7vw, 1rem);
+  text-align: center;
+  color: #222;
+}
+
+.abroad-side-card {
+  position: absolute;
+  top: 42vh;
+  width: min(22vw, 270px);
+  border: 2px solid #111;
+  background: #fffdf8;
+  padding: 0.6rem 0.75rem;
+}
+
+.abroad-side-card-left {
+  right: calc(50% + min(27vw, 330px));
+}
+
+.abroad-side-card-right {
+  left: calc(50% + min(27vw, 330px));
+}
+
+.abroad-side-card p {
+  margin: 0;
+  font-size: clamp(0.78rem, 1.5vw, 0.92rem);
+  line-height: 1.3;
+}
+
+.abroad-side-card-title {
+  font-weight: 700;
+  margin-bottom: 0.25rem;
+}
+
+@media (max-width: 700px) {
+  .abroad-connector-line {
+    width: 2px;
+    height: 24vh;
+  }
+
+  .abroad-map-frame-wrap {
+    top: 24vh;
+    width: min(88vw, 450px);
+  }
+
+  .abroad-side-card {
+    top: auto;
+    width: min(84vw, 380px);
+  }
+
+  .abroad-side-card-left {
+    left: 50%;
+    right: auto;
+    bottom: 16vh;
+    transform: translateX(-50%);
+  }
+
+  .abroad-side-card-right {
+    left: 50%;
+    bottom: 4vh;
+    transform: translateX(-50%);
+  }
+}

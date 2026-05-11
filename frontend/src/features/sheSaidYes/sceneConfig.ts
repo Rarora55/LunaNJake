@@ -298,7 +298,7 @@ export const SCENE_ITEMS: SceneItemConfig[] = [
     alt: '',
     widthDesktop: '30vw',
     widthMobile: '48vw',
-    left: '45%',
+    left: '50%',
     top: '40%',
     zIndex: 40,
     revealStart: 0.68,

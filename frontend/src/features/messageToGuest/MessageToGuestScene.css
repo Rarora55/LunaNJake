@@ -1,0 +1,103 @@
+.message-scene {
+  min-height: 100vh;
+  overflow: hidden;
+  position: relative;
+  background:
+    radial-gradient(circle at 50% 12%, #f4efe2 0%, #e8ddc8 45%, #d6c7ab 100%),
+    repeating-linear-gradient(0deg, rgba(0, 0, 0, 0.03) 0 1px, transparent 1px 5px);
+}
+
+.message-shell {
+  width: min(94vw, 1040px);
+  margin: 0 auto;
+  padding-top: 2vh;
+  padding-bottom: 6vh;
+}
+
+.message-header h1,
+.message-header p {
+  margin: 0;
+}
+
+.message-header h1 {
+  font-size: clamp(1.4rem, 3.5vw, 2.2rem);
+}
+
+.message-header p {
+  margin-top: 0.35rem;
+  font-size: clamp(0.92rem, 1.7vw, 1.06rem);
+}
+
+.message-paper-wrap {
+  margin-top: 1rem;
+  position: relative;
+  z-index: 2;
+}
+
+.message-paper-reveal {
+  border: 2px solid #111;
+  background: #f7f1e6;
+  width: min(92vw, 940px);
+  margin: 0 auto;
+}
+
+.message-paper-image {
+  width: 100%;
+  height: clamp(320px, 62vh, 740px);
+  display: block;
+  object-fit: cover;
+  object-position: top center;
+}
+
+.message-paper-fallback {
+  min-height: clamp(320px, 62vh, 740px);
+  display: grid;
+  place-items: center;
+  font-size: clamp(0.95rem, 1.8vw, 1.1rem);
+}
+
+.message-form {
+  margin: -7vh auto 0;
+  position: relative;
+  z-index: 3;
+  width: min(86vw, 720px);
+  border: 2px solid #111;
+  background: #fffdf8;
+  padding: clamp(12px, 2.2vw, 20px);
+  display: grid;
+  gap: 0.7rem;
+}
+
+.message-form label {
+  display: grid;
+  gap: 0.28rem;
+}
+
+.message-form span {
+  font-size: 0.9rem;
+}
+
+.message-form input,
+.message-form textarea {
+  width: 100%;
+  border: 1px solid #111;
+  background: #fff;
+  padding: 0.48rem 0.55rem;
+  font: inherit;
+}
+
+.message-form button {
+  justify-self: start;
+  border: 1px solid #111;
+  background: #111;
+  color: #fff;
+  padding: 0.45rem 0.82rem;
+  font: inherit;
+}
+
+@media (max-width: 700px) {
+  .message-form {
+    margin-top: -4vh;
+  }
+}
+

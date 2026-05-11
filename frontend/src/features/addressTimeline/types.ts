@@ -14,7 +14,15 @@ export type TimelineItemConfig = {
   markerAsset: string
   cardSide: TimelineSide
   cardIconAsset: string
-  text: string
+  frontTime: string
+  frontLabel: string
+  backTitle: string
+  backDescription: string
+  dressCode?: string
+  locationText: string
+  locationHref: string
+  detailHintTap: string
+  detailHintHover: string
 }
 
 export type MediaStatus = 'ready' | 'failed'

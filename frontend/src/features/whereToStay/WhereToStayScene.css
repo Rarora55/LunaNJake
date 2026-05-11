@@ -1,0 +1,123 @@
+.stay-scene {
+  min-height: 100vh;
+  position: relative;
+  background:
+    radial-gradient(circle at 50% 12%, #f4efe2 0%, #e8ddc8 45%, #d6c7ab 100%),
+    repeating-linear-gradient(0deg, rgba(0, 0, 0, 0.025) 0 1px, transparent 1px 4px);
+  outline: none;
+}
+
+.stay-scene:focus-visible {
+  box-shadow: inset 0 0 0 3px #111;
+}
+
+.stay-shell {
+  width: min(94vw, 1080px);
+  margin: 0 auto;
+  padding: 4vh 0 6vh;
+}
+
+.stay-header h1 {
+  margin: 0;
+  font-size: clamp(1.5rem, 4vw, 2.3rem);
+  letter-spacing: 0.02em;
+}
+
+.stay-header p {
+  margin: 0.5rem 0 0;
+  font-size: clamp(0.95rem, 1.8vw, 1.1rem);
+}
+
+.stay-map-wrap {
+  margin-top: 1rem;
+  border: 2px solid #111;
+  background: #f7f3ea;
+  padding: clamp(8px, 1.3vw, 12px);
+}
+
+.stay-map {
+  width: 100%;
+  height: clamp(240px, 34vw, 360px);
+  border: 0;
+  filter: grayscale(100%) contrast(1.05);
+}
+
+.stay-map-options {
+  margin-top: 0.55rem;
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.45rem;
+  align-items: center;
+}
+
+.stay-map-options span {
+  font-size: 0.84rem;
+}
+
+.stay-map-options a {
+  border: 1px solid #111;
+  color: #111;
+  text-decoration: none;
+  padding: 0.22rem 0.5rem;
+  font-size: 0.8rem;
+  background: #fffdf8;
+}
+
+.stay-grid {
+  margin-top: 1rem;
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: 0.9rem;
+}
+
+.stay-card {
+  border: 2px solid #111;
+  background: #fffdf8;
+  padding: 0.55rem;
+  display: grid;
+  gap: 0.4rem;
+}
+
+.stay-card img {
+  width: 100%;
+  aspect-ratio: 4 / 3;
+  object-fit: cover;
+  border: 1px solid #111;
+  filter: grayscale(100%);
+}
+
+.stay-card h2,
+.stay-card p {
+  margin: 0;
+}
+
+.stay-card h2 {
+  font-size: clamp(0.95rem, 1.5vw, 1.05rem);
+}
+
+.stay-card p {
+  font-size: clamp(0.78rem, 1.3vw, 0.9rem);
+  line-height: 1.3;
+}
+
+.stay-card a {
+  justify-self: start;
+  margin-top: 0.1rem;
+  border: 1px solid #111;
+  color: #111;
+  text-decoration: none;
+  padding: 0.28rem 0.55rem;
+  font-size: 0.84rem;
+}
+
+@media (max-width: 960px) {
+  .stay-grid {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+}
+
+@media (max-width: 700px) {
+  .stay-grid {
+    grid-template-columns: 1fr;
+  }
+}

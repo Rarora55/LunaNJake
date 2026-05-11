@@ -5,7 +5,11 @@ import { firstStoryPath } from '../config/storyInputs'
 import type { Lang } from '../config/storySequence'
 import AddressIntroScene from '../features/addressTimeline/AddressIntroScene'
 import AddressTimelineScene from '../features/addressTimeline/AddressTimelineScene'
+import ComingFromAbroadScene from '../features/comingFromAbroad/ComingFromAbroadScene'
 import SheSaidYesMarriedScene from '../features/sheSaidYes/SheSaidYesMarriedScene'
+import TravellingFromLondonScene from '../features/travellingFromLondon/TravellingFromLondonScene'
+import MessageToGuestScene from '../features/messageToGuest/MessageToGuestScene'
+import WhereToStayScene from '../features/whereToStay/WhereToStayScene'
 import { canTriggerNavigation, resolveDirectionFromKey, resolveDirectionFromWheel } from '../features/story/navigationController'
 
 type PlaceholderRoute = {
@@ -167,6 +171,94 @@ function AddressRoute({ lang }: { lang: Lang }) {
   )
 }
 
+function ComingFromAbroadRoute({ lang }: { lang: Lang }) {
+  const navigate = useNavigate()
+  const location = useLocation()
+  const navState = (location.state ?? {}) as PostStoryNavState
+  const sequence = postStorySequenceFor(lang)
+  const currentIdx = sequence.findIndex((path) => path === location.pathname)
+  const previousPath = currentIdx <= 0 ? `/${lang}/address` : sequence[currentIdx - 1]
+  const nextPath = currentIdx >= sequence.length - 1 ? null : sequence[currentIdx + 1]
+
+  return (
+    <ComingFromAbroadScene
+      lang={lang}
+      onNavigateBackward={() => navigate(previousPath, { state: navState })}
+      onNavigateForward={() => {
+        if (!nextPath) return
+        navigate(nextPath, { state: navState })
+      }}
+      testId="coming-from-abroad-page"
+    />
+  )
+}
+
+function TravellingFromLondonRoute({ lang }: { lang: Lang }) {
+  const navigate = useNavigate()
+  const location = useLocation()
+  const navState = (location.state ?? {}) as PostStoryNavState
+  const sequence = postStorySequenceFor(lang)
+  const currentIdx = sequence.findIndex((path) => path === location.pathname)
+  const previousPath = currentIdx <= 0 ? `/${lang}/coming-from-abroad` : sequence[currentIdx - 1]
+  const nextPath = currentIdx >= sequence.length - 1 ? null : sequence[currentIdx + 1]
+
+  return (
+    <TravellingFromLondonScene
+      lang={lang}
+      onNavigateBackward={() => navigate(previousPath, { state: navState })}
+      onNavigateForward={() => {
+        if (!nextPath) return
+        navigate(nextPath, { state: navState })
+      }}
+      testId="travelling-from-london-page"
+    />
+  )
+}
+
+function WhereToStayRoute({ lang }: { lang: Lang }) {
+  const navigate = useNavigate()
+  const location = useLocation()
+  const navState = (location.state ?? {}) as PostStoryNavState
+  const sequence = postStorySequenceFor(lang)
+  const currentIdx = sequence.findIndex((path) => path === location.pathname)
+  const previousPath = currentIdx <= 0 ? `/${lang}/travelling-from-london` : sequence[currentIdx - 1]
+  const nextPath = currentIdx >= sequence.length - 1 ? null : sequence[currentIdx + 1]
+
+  return (
+    <WhereToStayScene
+      lang={lang}
+      onNavigateBackward={() => navigate(previousPath, { state: navState })}
+      onNavigateForward={() => {
+        if (!nextPath) return
+        navigate(nextPath, { state: navState })
+      }}
+      testId="where-to-stay-page"
+    />
+  )
+}
+
+function MessageToGuestRoute({ lang }: { lang: Lang }) {
+  const navigate = useNavigate()
+  const location = useLocation()
+  const navState = (location.state ?? {}) as PostStoryNavState
+  const sequence = postStorySequenceFor(lang)
+  const currentIdx = sequence.findIndex((path) => path === location.pathname)
+  const previousPath = currentIdx <= 0 ? `/${lang}/where-to-stay` : sequence[currentIdx - 1]
+  const nextPath = currentIdx >= sequence.length - 1 ? null : sequence[currentIdx + 1]
+
+  return (
+    <MessageToGuestScene
+      lang={lang}
+      onNavigateBackward={() => navigate(previousPath, { state: navState })}
+      onNavigateForward={() => {
+        if (!nextPath) return
+        navigate(nextPath, { state: navState })
+      }}
+      testId="message-to-guest-page"
+    />
+  )
+}
+
 export function AppRoutes() {
   return (
     <Routes>
@@ -185,9 +277,17 @@ export function AppRoutes() {
       <Route path="/it/address-intro" element={<AddressIntroRoute lang="it" />} />
       <Route path="/en/address" element={<AddressRoute lang="en" />} />
       <Route path="/it/address" element={<AddressRoute lang="it" />} />
+      <Route path="/en/coming-from-abroad" element={<ComingFromAbroadRoute lang="en" />} />
+      <Route path="/it/coming-from-abroad" element={<ComingFromAbroadRoute lang="it" />} />
+      <Route path="/en/travelling-from-london" element={<TravellingFromLondonRoute lang="en" />} />
+      <Route path="/it/travelling-from-london" element={<TravellingFromLondonRoute lang="it" />} />
+      <Route path="/en/where-to-stay" element={<WhereToStayRoute lang="en" />} />
+      <Route path="/it/where-to-stay" element={<WhereToStayRoute lang="it" />} />
+      <Route path="/en/message-to-the-guest" element={<MessageToGuestRoute lang="en" />} />
+      <Route path="/it/message-to-the-guest" element={<MessageToGuestRoute lang="it" />} />
 
       {placeholderRoutes
-        .filter((route) => !['address', 'address-intro'].includes(route.slug))
+        .filter((route) => !['address', 'address-intro', 'coming-from-abroad', 'travelling-from-london', 'where-to-stay', 'message-to-the-guest'].includes(route.slug))
         .flatMap((route) => [
           <Route key={`en-${route.slug}`} path={`/en/${route.slug}`} element={<PlaceholderPage title={route.title} backgroundColor={route.backgroundColor} />} />,
           <Route key={`it-${route.slug}`} path={`/it/${route.slug}`} element={<PlaceholderPage title={route.title} backgroundColor={route.backgroundColor} />} />,

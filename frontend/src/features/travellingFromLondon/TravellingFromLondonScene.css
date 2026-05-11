@@ -1,0 +1,156 @@
+.london-scene {
+  min-height: 100vh;
+  overflow: hidden;
+  position: relative;
+  background:
+    radial-gradient(circle at 50% 12%, #f4efe2 0%, #e7dbc3 44%, #d8c7a8 100%),
+    repeating-linear-gradient(0deg, rgba(0, 0, 0, 0.03) 0 1px, transparent 1px 5px);
+}
+
+.london-shell {
+  position: relative;
+  width: min(94vw, 980px);
+  height: 84vh;
+  margin: 8vh auto 0;
+}
+
+.london-connector-line {
+  position: absolute;
+  left: 50%;
+  top: 0;
+  width: 3px;
+  height: 30vh;
+  background: #111;
+  transform-origin: top center;
+}
+
+.london-gif-frame-wrap {
+  position: absolute;
+  left: 50%;
+  top: 30vh;
+  transform: translateX(-50%);
+  width: min(46vw, 560px);
+  aspect-ratio: 1 / 1;
+}
+
+.london-gif-frame-outline {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+}
+
+.london-gif-frame-outline rect {
+  fill: none;
+  stroke: #111;
+  stroke-width: 2;
+  stroke-linecap: round;
+  stroke-linejoin: round;
+}
+
+.london-gif-inner {
+  position: absolute;
+  inset: clamp(12px, 2vw, 24px);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  overflow: hidden;
+}
+
+.london-gif {
+  width: 100%;
+  height: 100%;
+  object-fit: contain;
+  object-position: center;
+  display: block;
+}
+
+.london-gif-fallback {
+  margin: 0;
+  font-size: clamp(0.9rem, 1.7vw, 1rem);
+  text-align: center;
+  color: #222;
+}
+
+.london-side-card {
+  position: absolute;
+  top: 42vh;
+  width: min(22vw, 270px);
+  border: 2px solid #111;
+  background: #fffdf8;
+  padding: 0.6rem 0.75rem;
+}
+
+.london-side-card-left {
+  right: calc(50% + min(24vw, 300px));
+}
+
+.london-side-card-right {
+  left: calc(50% + min(24vw, 300px));
+  width: min(28vw, 360px);
+}
+
+.london-side-card p {
+  margin: 0;
+  font-size: clamp(0.78rem, 1.5vw, 0.92rem);
+  line-height: 1.3;
+}
+
+.london-side-card-title {
+  font-weight: 700;
+  margin-bottom: 0.25rem;
+}
+
+.london-side-card-copy {
+  margin-bottom: 0.18rem;
+}
+
+.london-location-row {
+  display: flex;
+  align-items: flex-start;
+  gap: 0.35rem;
+  margin-top: 0.24rem;
+}
+
+.london-detail-icon {
+  width: 14px;
+  height: 14px;
+  flex: 0 0 auto;
+  margin-top: 1px;
+}
+
+.london-location-row a {
+  color: #111;
+  text-decoration: underline;
+  text-underline-offset: 2px;
+}
+
+@media (max-width: 700px) {
+  .london-connector-line {
+    width: 2px;
+    height: 24vh;
+  }
+
+  .london-gif-frame-wrap {
+    top: 24vh;
+    width: min(88vw, 450px);
+  }
+
+  .london-side-card {
+    top: auto;
+    width: min(84vw, 380px);
+  }
+
+  .london-side-card-left {
+    left: 50%;
+    right: auto;
+    bottom: 16vh;
+    transform: translateX(-50%);
+  }
+
+  .london-side-card-right {
+    left: 50%;
+    bottom: 4vh;
+    transform: translateX(-50%);
+  }
+}
