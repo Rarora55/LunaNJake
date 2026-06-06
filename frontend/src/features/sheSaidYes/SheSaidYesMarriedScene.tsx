@@ -1,14 +1,19 @@
 import { useMemo, useRef, useState, type CSSProperties, type KeyboardEvent, type WheelEvent } from 'react'
+import { Link } from 'react-router-dom'
 import { buildExitProfile } from '../addressTimeline/exitActorProfiles'
 import { SCENE_ITEMS, SCENE_PROGRESS, SCENE_STRINGS } from './sceneConfig'
 import './SheSaidYesMarriedScene.css'
 
 type Props = {
   title: string
+  entrySource?: 'intro' | 'other'
+  rsvpPath: string
   testId?: string
   onNavigateBackward: () => void
   onNavigateForward: () => void
 }
+
+const WEDDING_DATE_LABEL = 'Monday, 31st May 2027'
 
 function clamp(value: number, min = 0, max = 1) {
   return Math.min(max, Math.max(min, value))
@@ -41,11 +46,15 @@ function resolveBottomEntry(topValue: string, configuredEntryY: number) {
   return Math.max(configuredEntryY, distanceFromBottom)
 }
 
-export default function SheSaidYesMarriedScene({ title, testId, onNavigateBackward, onNavigateForward }: Props) {
+export default function SheSaidYesMarriedScene({ title, entrySource = 'other', rsvpPath, testId, onNavigateBackward, onNavigateForward }: Props) {
   const [progress, setProgress] = useState(0)
   const [isExiting, setIsExiting] = useState(false)
   const touchStartY = useRef<number | null>(null)
-  const forwardHoldStartMs = useRef<number | null>(null)
+  const touchLastY = useRef<number | null>(null)
+  const lastNavMs = useRef(0)
+  const isMobile = typeof window !== 'undefined' && typeof window.matchMedia === 'function'
+    ? window.matchMedia('(max-width: 768px)').matches
+    : false
 
   const visuals = useMemo(
     () =>
@@ -91,24 +100,30 @@ export default function SheSaidYesMarriedScene({ title, testId, onNavigateBackwa
       }),
     [progress],
   )
+  const textReveal = useMemo(() => revealProgress(progress, 0.96, 0.995), [progress])
 
-  const updateProgress = (delta: number) => {
+  const tryNavigate = (direction: 'backward' | 'forward') => {
+    const now = Date.now()
+    const cooldown = isMobile ? 360 : 520
+    if (now - lastNavMs.current < cooldown) return false
+    lastNavMs.current = now
+    if (direction === 'backward') onNavigateBackward()
+    else onNavigateForward()
+    return true
+  }
+
+  const updateProgress = (delta: number, allowNavigate = true) => {
     setProgress((prev) => {
       const next = clamp(prev + delta)
-      if (delta < 0 && prev <= 0.02) onNavigateBackward()
-      if (delta > 0 && prev >= SCENE_PROGRESS.minNavigateForward) {
-        const now = Date.now()
-        if (forwardHoldStartMs.current === null) {
-          forwardHoldStartMs.current = now
-        } else if (now - forwardHoldStartMs.current >= SCENE_PROGRESS.forwardHoldMs) {
-          forwardHoldStartMs.current = null
-          if (!isExiting) {
-            setIsExiting(true)
-            window.setTimeout(() => onNavigateForward(), 620)
-          }
+      if (allowNavigate && delta < 0 && prev <= 0.02) {
+        tryNavigate('backward')
+        return prev
+      }
+      if (allowNavigate && delta > 0 && prev >= SCENE_PROGRESS.minNavigateForward) {
+        if (!isExiting && tryNavigate('forward')) {
+          setIsExiting(true)
         }
-      } else if (next < SCENE_PROGRESS.minNavigateForward) {
-        forwardHoldStartMs.current = null
+        return prev
       }
       return next
     })
@@ -116,7 +131,8 @@ export default function SheSaidYesMarriedScene({ title, testId, onNavigateBackwa
 
   const onWheel = (event: WheelEvent<HTMLElement>) => {
     event.preventDefault()
-    const rawDelta = event.deltaY * SCENE_PROGRESS.wheelFactor
+    const wheelFactor = isMobile ? SCENE_PROGRESS.wheelFactor * 1.75 : SCENE_PROGRESS.wheelFactor
+    const rawDelta = event.deltaY * wheelFactor
     updateProgress(capInputDelta(rawDelta))
   }
 
@@ -135,24 +151,53 @@ export default function SheSaidYesMarriedScene({ title, testId, onNavigateBackwa
     <main
       className="she-said-yes-root"
       data-testid={testId ?? 'terminal-page'}
+      data-entry-source={entrySource}
       onWheel={onWheel}
       onKeyDown={onKeyDown}
       onTouchStart={(event) => {
-        touchStartY.current = event.changedTouches[0]?.clientY ?? null
+        const y = event.changedTouches[0]?.clientY ?? null
+        touchStartY.current = y
+        touchLastY.current = y
+      }}
+      onTouchMove={(event) => {
+        const current = event.changedTouches[0]?.clientY
+        const last = touchLastY.current
+        if (typeof current !== 'number' || last === null) return
+        const delta = last - current
+        touchLastY.current = current
+        if (Math.abs(delta) < 1.5) return
+        const moveFactor = isMobile ? SCENE_PROGRESS.touchFactor * 1.35 : SCENE_PROGRESS.touchFactor
+        const rawDelta = delta * moveFactor
+        updateProgress(capInputDelta(rawDelta), false)
       }}
       onTouchEnd={(event) => {
         const start = touchStartY.current
         const end = event.changedTouches[0]?.clientY
         touchStartY.current = null
+        touchLastY.current = null
         if (start === null || typeof end !== 'number') return
         const delta = start - end
-        if (Math.abs(delta) < 16) return
-        const rawDelta = delta * SCENE_PROGRESS.touchFactor
+        if (Math.abs(delta) < (isMobile ? 10 : 16)) return
+        const touchFactor = isMobile ? SCENE_PROGRESS.touchFactor * 1.25 : SCENE_PROGRESS.touchFactor
+        const rawDelta = delta * touchFactor
         updateProgress(capInputDelta(rawDelta))
       }}
       tabIndex={0}
     >
       <h1 className="scene-heading">{title}</h1>
+      <header className="she-said-yes-header" aria-label="Wedding heading" style={{ opacity: textReveal }}>
+        <h2 className="she-said-yes-title">
+          <span className="she-title-luna">
+            <span className="she-title-l-letter">L</span>una
+          </span>{' '}
+          &amp; Jake
+        </h2>
+        <p className="she-said-yes-top-date">{WEDDING_DATE_LABEL}</p>
+        <Link className="she-said-yes-rsvp" to={rsvpPath} state={{ fromRsvpCta: true }} aria-label="Open RSVP form">
+          <img className="she-said-yes-rsvp-image default" src="/images/Married/FNoHover.png" alt="" aria-hidden="true" />
+          <img className="she-said-yes-rsvp-image hover" src="/images/Married/FHoover.png" alt="Open RSVP form" />
+        </Link>
+      </header>
       <section className="she-said-yes-stage">
         {strings.map(({ item, opacity }) => (
           <img
@@ -187,3 +232,4 @@ export default function SheSaidYesMarriedScene({ title, testId, onNavigateBackwa
     </main>
   )
 }
+

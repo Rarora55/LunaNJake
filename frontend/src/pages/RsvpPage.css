@@ -1,0 +1,114 @@
+.rsvp-page {
+  min-height: 100vh;
+  padding: clamp(16px, 4vw, 32px);
+  display: grid;
+  place-items: center;
+  font-family: "Cormorant Garamond", serif;
+  background:
+    radial-gradient(circle at 50% 12%, #f4efe2 0%, #e7dbc3 44%, #d8c7a8 100%),
+    repeating-linear-gradient(0deg, rgba(0, 0, 0, 0.03) 0 1px, transparent 1px 5px);
+}
+
+.rsvp-shell {
+  width: min(94vw, 660px);
+  border: 2px solid #111;
+  background: rgba(255, 255, 255, 0.78);
+  padding: clamp(18px, 4vw, 30px);
+}
+
+.rsvp-shell h1 {
+  margin: 0;
+  font-size: clamp(2rem, 6vw, 3rem);
+}
+
+.rsvp-back-link {
+  display: inline-flex;
+  margin-bottom: 14px;
+  color: #111;
+  text-decoration: none;
+  font-size: 1rem;
+  font-weight: 700;
+}
+
+.rsvp-back-link:hover,
+.rsvp-back-link:focus-visible {
+  text-decoration: underline;
+  outline: none;
+}
+
+.rsvp-intro {
+  margin: 8px 0 18px;
+  font-size: clamp(1.05rem, 2.8vw, 1.3rem);
+}
+
+.rsvp-form {
+  display: grid;
+  gap: 12px;
+}
+
+.rsvp-form label,
+.rsvp-fieldset legend {
+  font-size: 1.15rem;
+  font-weight: 700;
+}
+
+.rsvp-form input[type="text"] {
+  width: 100%;
+  border: 1px solid #111;
+  border-radius: 0;
+  padding: 10px 12px;
+  font: inherit;
+  font-size: 1.05rem;
+  background: #fff;
+}
+
+.rsvp-fieldset {
+  border: 1px solid #111;
+  padding: 10px 12px;
+  margin: 2px 0;
+  display: grid;
+  gap: 8px;
+}
+
+.rsvp-radio-label {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  font-size: 1.05rem;
+  font-weight: 400;
+}
+
+.rsvp-form button[type="submit"] {
+  justify-self: start;
+  padding: 10px 18px;
+  border: 1px solid #111;
+  background: #fdf9ee;
+  border-radius: 0;
+  font: inherit;
+  font-size: 1.1rem;
+}
+
+.rsvp-form button[type="submit"]:disabled {
+  opacity: 0.6;
+  cursor: not-allowed;
+}
+
+.rsvp-status {
+  margin: 14px 0 0;
+  font-size: 1.05rem;
+  font-weight: 700;
+}
+
+.rsvp-status.success {
+  color: #0a6c3f;
+}
+
+.rsvp-status.error {
+  color: #8a1f24;
+}
+
+@media (max-width: 700px) {
+  .rsvp-shell {
+    width: min(96vw, 560px);
+  }
+}

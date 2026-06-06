@@ -1,0 +1,91 @@
+.lnj-scene {
+  min-height: 100vh;
+  overflow: hidden;
+  overflow-x: clip;
+  position: relative;
+  background:
+    radial-gradient(circle at 50% 10%, #f4efe2 0%, #e7dbc3 44%, #d8c7a8 100%),
+    repeating-linear-gradient(0deg, rgba(0, 0, 0, 0.03) 0 1px, transparent 1px 5px);
+}
+
+.lnj-content {
+  min-height: 100vh;
+  width: min(94vw, 980px);
+  margin: 0 auto;
+  padding: 12vh 0 8vh;
+  display: grid;
+  align-content: center;
+  justify-items: center;
+  gap: clamp(14px, 3vw, 34px);
+  opacity: 0;
+  transform: translateY(14px);
+  animation: lnj-fade-in 900ms ease-out forwards;
+}
+
+@keyframes lnj-fade-in {
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+.lnj-title {
+  margin: 0;
+  text-align: center;
+  font-family: "Gloria Hallelujah", "Patrick Hand", cursive;
+  letter-spacing: 0.04em;
+  line-height: 1.45;
+  font-weight: 400;
+  font-size: clamp(2rem, 6vw, 4rem);
+  color: #4C77E6;
+}
+
+.lnj-jake-wrap {
+  position: relative;
+  display: inline-block;
+}
+
+.lnj-j-letter {
+  position: relative;
+  display: inline-block;
+}
+
+.lnj-subtitle {
+  margin: 0;
+  text-align: center;
+  font-family: "Gloria Hallelujah", "Patrick Hand", cursive;
+  letter-spacing: 0.04em;
+  line-height: 1.45;
+  font-weight: 400;
+  font-size: clamp(1rem, 2.2vw, 1.55rem);
+  color: #4C77E6;
+}
+
+.lnj-image {
+  width: min(94vw, 760px);
+  max-height: 62vh;
+  object-fit: contain;
+  display: block;
+}
+
+@media (max-width: 430px) {
+  .lnj-content {
+    width: min(92vw, 420px);
+    padding: 9vh 0 6vh;
+    gap: clamp(0.5rem, 2.8vw, 1rem);
+  }
+
+  .lnj-title {
+    font-size: clamp(1.55rem, 8.4vw, 2.3rem);
+    line-height: 1.35;
+  }
+
+  .lnj-subtitle {
+    font-size: clamp(0.88rem, 3.7vw, 1.06rem);
+  }
+
+  .lnj-image {
+    width: min(92vw, 400px);
+    max-height: 54vh;
+  }
+}

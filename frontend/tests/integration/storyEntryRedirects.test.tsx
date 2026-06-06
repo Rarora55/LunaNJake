@@ -12,23 +12,23 @@ function renderAt(path: string) {
 }
 
 describe('story entry redirects', () => {
-  it('redirects /en/story and /it/story to first story step', async () => {
+  it('redirects /en/story and /it/story to english intro fallback', async () => {
     renderAt('/en/story')
-    expect(await screen.findByTestId('story-page')).toHaveAttribute('data-slug', 'the-first-time')
+    expect(await screen.findByTestId('intro-scene')).toBeInTheDocument()
 
     renderAt('/it/story')
-    expect(await screen.findAllByTestId('story-page')).toHaveLength(2)
+    expect(await screen.findAllByTestId('intro-scene')).toHaveLength(2)
   })
 
-  it('redirects unknown localized slug to first step', async () => {
+  it('redirects unknown localized slug to english intro fallback', async () => {
     renderAt('/en/story/unknown-slug')
-    expect(await screen.findByTestId('story-page')).toHaveAttribute('data-slug', 'the-first-time')
+    expect(await screen.findByTestId('intro-scene')).toBeInTheDocument()
   })
 
-  it('routes from root language selection to first story step', async () => {
+  it('routes from root language selection to localized intro', async () => {
     renderAt('/')
     fireEvent.click(screen.getByRole('button', { name: 'English' }))
-    expect(await screen.findByTestId('story-page')).toHaveAttribute('data-slug', 'the-first-time')
+    expect(await screen.findByTestId('intro-scene')).toBeInTheDocument()
   })
 })
 

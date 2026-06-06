@@ -4,7 +4,12 @@ import { Navigate, useNavigate, useParams } from 'react-router-dom'
 import { BACKWARD_KEYS, FORWARD_KEYS, firstStoryPath } from '../config/storyInputs'
 import { STORY_SEQUENCE, getStoryEntry, type Lang } from '../config/storySequence'
 import { resolveStoryText } from '../i18n/storyText'
-import { canTriggerNavigation, resolveDirectionFromWheel, resolveInvalidStorySlug, resolveStoryNavigation } from '../features/story/navigationController'
+import {
+  canTriggerNavigationWithCooldown,
+  resolveDirectionFromWheel,
+  resolveInvalidStorySlug,
+  resolveStoryNavigation,
+} from '../features/story/navigationController'
 import { HIGHLIGHT_FADE_MS, STEP_TRANSITION_EASE, STEP_TRANSITION_MS, TYPEWRITER_CHAR_MS } from '../features/story/transitions'
 import './StoryPage.css'
 
@@ -72,12 +77,17 @@ export default function StoryPage() {
   const typeChars = Math.max(1, Math.ceil(storyText.length))
 
   const isHighlight = entry.displayMode === 'highlight'
+  const hasMatchMedia = typeof window !== 'undefined' && typeof window.matchMedia === 'function'
+  const isMobileViewport = hasMatchMedia ? window.matchMedia('(max-width: 430px)').matches : false
+  const prefersReducedMotion = hasMatchMedia ? window.matchMedia('(prefers-reduced-motion: reduce)').matches : false
+  const swipeThresholdPx = isMobileViewport ? 14 : 20
+  const transitionCooldownMs = isMobileViewport ? 420 : 700
 
   const captionedVisible = STORY_SEQUENCE.filter((item, idx) => idx <= activeIndex && item.displayMode === 'captioned')
 
   const handleDirection = (direction: 'forward' | 'backward') => {
     const now = Date.now()
-    if (!canTriggerNavigation(now, lastTriggerMs.current)) return
+    if (!canTriggerNavigationWithCooldown(now, lastTriggerMs.current, transitionCooldownMs)) return
     lastTriggerMs.current = now
     const result = resolveStoryNavigation(lang, entry.slug, direction)
     navigate(result.nextPath)
@@ -90,7 +100,7 @@ export default function StoryPage() {
         {
           '--step-ms': `${STEP_TRANSITION_MS}ms`,
           '--step-ease': STEP_TRANSITION_EASE,
-          '--type-ms': `${Math.max(400, typeChars * TYPEWRITER_CHAR_MS)}ms`,
+          '--type-ms': `${prefersReducedMotion ? 1 : Math.max(400, typeChars * TYPEWRITER_CHAR_MS)}ms`,
           '--fade-ms': `${HIGHLIGHT_FADE_MS}ms`,
         } as CSSProperties
       }
@@ -109,7 +119,7 @@ export default function StoryPage() {
         touchStartY.current = null
         if (startY === null || typeof endY !== 'number') return
         const delta = startY - endY
-        if (Math.abs(delta) < 20) return
+        if (Math.abs(delta) < swipeThresholdPx) return
         handleDirection(delta > 0 ? 'forward' : 'backward')
       }}
       onKeyDown={(event) => {
@@ -123,6 +133,7 @@ export default function StoryPage() {
       data-slug={entry.slug}
       data-display-mode={entry.displayMode}
       data-active-index={activeIndex}
+      data-mobile-profile={isMobileViewport ? (prefersReducedMotion ? 'reduced-mobile' : 'mobile') : 'desktop'}
     >
       <section className={`story-stage ${isHighlight ? 'highlight' : 'captioned'}`}>
         <div className={`placeholder-stack ${isHighlight ? 'fade-out' : ''}`} data-testid="placeholder-stack">

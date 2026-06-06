@@ -1,6 +1,7 @@
 .message-scene {
   min-height: 100vh;
   overflow: hidden;
+  overflow-x: clip;
   position: relative;
   background:
     radial-gradient(circle at 50% 12%, #f4efe2 0%, #e8ddc8 45%, #d6c7ab 100%),
@@ -35,25 +36,59 @@
 }
 
 .message-paper-reveal {
-  border: 2px solid #111;
-  background: #f7f1e6;
+  border: 5px solid #000;
+  background: #f8efe3;
   width: min(92vw, 940px);
   margin: 0 auto;
+  padding: clamp(12px, 2vw, 20px);
 }
 
-.message-paper-image {
-  width: 100%;
-  height: clamp(320px, 62vh, 740px);
-  display: block;
-  object-fit: cover;
-  object-position: top center;
-}
-
-.message-paper-fallback {
+.message-cards-grid {
   min-height: clamp(320px, 62vh, 740px);
   display: grid;
-  place-items: center;
-  font-size: clamp(0.95rem, 1.8vw, 1.1rem);
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: clamp(10px, 2vw, 18px);
+  align-content: space-between;
+}
+
+.message-card {
+  border: 4px solid #000;
+  padding: clamp(10px, 1.8vw, 14px);
+  box-shadow: 5px 5px 0 #000;
+  display: grid;
+  gap: 0.45rem;
+  min-height: clamp(130px, 22vh, 210px);
+}
+
+.message-card:nth-child(1) {
+  transform: rotate(-2.2deg);
+}
+
+.message-card:nth-child(2) {
+  transform: rotate(1.8deg);
+}
+
+.message-card:nth-child(3) {
+  transform: rotate(2.4deg);
+}
+
+.message-card:nth-child(4) {
+  transform: rotate(-1.6deg);
+}
+
+.message-card-name,
+.message-card-text {
+  margin: 0;
+}
+
+.message-card-name {
+  font-weight: 700;
+  font-size: clamp(0.95rem, 1.6vw, 1.08rem);
+}
+
+.message-card-text {
+  font-size: clamp(0.9rem, 1.45vw, 1rem);
+  line-height: 1.35;
 }
 
 .message-form {
@@ -61,7 +96,7 @@
   position: relative;
   z-index: 3;
   width: min(86vw, 720px);
-  border: 2px solid #111;
+  border: 5px solid #000;
   background: #fffdf8;
   padding: clamp(12px, 2.2vw, 20px);
   display: grid;
@@ -80,7 +115,7 @@
 .message-form input,
 .message-form textarea {
   width: 100%;
-  border: 1px solid #111;
+  border: 2px solid #000;
   background: #fff;
   padding: 0.48rem 0.55rem;
   font: inherit;
@@ -88,16 +123,70 @@
 
 .message-form button {
   justify-self: start;
-  border: 1px solid #111;
-  background: #111;
+  border: 2px solid #000;
+  background: #000;
   color: #fff;
   padding: 0.45rem 0.82rem;
   font: inherit;
 }
 
+.message-form-actions {
+  display: flex;
+  gap: 0.6rem;
+  flex-wrap: wrap;
+}
+
+.message-clear-button {
+  background: #fff;
+  color: #000;
+}
+
 @media (max-width: 700px) {
+  .message-cards-grid {
+    grid-template-columns: 1fr;
+  }
+
   .message-form {
     margin-top: -4vh;
   }
 }
 
+@media (max-width: 430px) {
+  .message-shell {
+    width: min(92vw, 420px);
+    padding-top: 1vh;
+  }
+
+  .message-header h1 {
+    font-size: clamp(1.2rem, 6.1vw, 1.55rem);
+  }
+
+  .message-header p {
+    font-size: clamp(0.82rem, 3.7vw, 0.95rem);
+  }
+
+  .message-paper-reveal {
+    border-width: 3px;
+    padding: 0.6rem;
+  }
+
+  .message-card {
+    border-width: 2px;
+    min-height: clamp(110px, 20vh, 150px);
+  }
+
+  .message-card-name {
+    font-size: clamp(0.86rem, 3.8vw, 0.98rem);
+  }
+
+  .message-card-text {
+    font-size: clamp(0.82rem, 3.5vw, 0.92rem);
+  }
+
+  .message-form {
+    width: min(92vw, 420px);
+    border-width: 3px;
+    margin-top: -2vh;
+    padding: 0.65rem;
+  }
+}

@@ -1,0 +1,309 @@
+.intro-root {
+  min-height: 100vh;
+  width: 100%;
+  display: grid;
+  place-items: center;
+  padding: clamp(1rem, 4vw, 2rem);
+  overflow: hidden;
+  background:
+    radial-gradient(circle at 50% 12%, #f4efe2 0%, #e7dbc3 44%, #d8c7a8 100%),
+    repeating-linear-gradient(0deg, rgba(0, 0, 0, 0.03) 0 1px, transparent 1px 5px);
+  font-family: 'Brittany Signature', 'Amsterdam Four', 'Caveat', cursive;
+}
+
+.intro-stage {
+  width: min(94vw, 86rem);
+  text-align: left;
+  opacity: 0;
+  transform: translateY(0.35rem);
+  transition: opacity 450ms ease, transform 450ms ease;
+}
+
+.intro-stage.is-visible {
+  opacity: 1;
+  transform: translateY(0);
+}
+
+.intro-stage.is-hidden {
+  opacity: 0;
+}
+
+.intro-text {
+  margin: 0;
+  line-height: 1.6;
+  color: #547fdb;
+}
+
+.intro-text--long {
+  font-size: clamp(0.9rem, 2.4vw, 1.15rem);
+}
+
+.intro-text--short {
+  font-size: clamp(1.1rem, 3vw, 1.45rem);
+}
+
+.intro-final-layout {
+  position: relative;
+  min-height: min(82vh, 56rem);
+  width: 100%;
+  --intro-button-x: 0rem;
+  --intro-button-y: -10rem;
+  --intro-details-x: 0rem;
+  --intro-details-y: -4.5rem;
+  display: grid;
+  grid-template-columns: minmax(320px, 0.95fr) minmax(340px, 1.05fr);
+  grid-template-areas:
+    'title rings'
+    'button rings';
+  align-items: center;
+  justify-items: center;
+  column-gap: clamp(0.50rem, 2vw, 2rem);
+  row-gap: -20rem;
+  padding: clamp(0.35rem, 1.8vw, 1rem) clamp(0.5rem, 1vw, 1rem);
+}
+
+.intro-herb-layer {
+  position: absolute;
+  left: 0;
+  bottom: 0;
+  width: clamp(10rem, 22vw, 20rem);
+  aspect-ratio: 0.78;
+  pointer-events: none;
+  opacity: 0.45;
+  transform: translate(-20%, 8%);
+  transform-origin: bottom left;
+}
+
+.intro-herb {
+  position: absolute;
+  left: 0;
+  bottom: 0;
+  width: 100%;
+  height: auto;
+  object-fit: contain;
+}
+
+.intro-herb--one {
+  width: 92%;
+  transform: translate(200%, -50%);
+}
+
+.intro-herb--two {
+  width: 68%;
+  transform: translate(-200%, -40%);
+}
+
+.intro-herb--three {
+  width: 74%;
+  transform: translate(-155%, -50%);
+}
+
+.intro-herb--four {
+  width: 57%;
+  transform: translate(-210%, -100%);
+}
+
+.intro-title-block {
+  grid-area: title;
+  display: grid;
+  align-content: center;
+  justify-items: start;
+  transform: translate(-11rem, -0.2rem);
+  z-index: 1;
+}
+
+.intro-title {
+  margin: 0;
+}
+
+.intro-title-image {
+  width: min(100%, 40rem);
+  transform: translate(0.4rem, -0.3rem);
+  height: auto;
+  display: block;
+}
+
+.intro-rings-column {
+  grid-area: rings;
+  display: grid;
+  justify-items: center;
+  align-content: center;
+  gap: clamp(0.15rem, 0.5vw, 0.5rem);
+  z-index: 1;
+}
+
+.intro-rings-wrap {
+  display: grid;
+  place-items: center;
+  z-index: 1;
+}
+
+.intro-rings-image {
+  width: min(100%, 50rem);
+  transform: translate(-4rem, 5rem);
+  height: auto;
+  object-fit: contain;
+  display: block;
+}
+
+.intro-details-image {
+  width: min(100%, 40rem);
+  height: auto;
+  display: block;
+  position: relative;
+  z-index: 3;
+  transform: translate(var(--intro-details-x), var(--intro-details-y));
+}
+
+.intro-continue {
+  grid-area: button;
+  display: inline-flex;
+  position: relative;
+  justify-self: start;
+  align-items: center;
+  text-decoration: none;
+  outline: none;
+  z-index: 4;
+  width: min(100%, 21rem);
+  aspect-ratio: 3.1 / 1;
+  transform: translate(var(--intro-button-x), var(--intro-button-y));
+}
+
+.intro-continue-image {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  display: block;
+  object-fit: contain;
+  transition: opacity 120ms ease;
+}
+
+.intro-continue-image--default {
+  opacity: 1;
+}
+
+.intro-continue-image--hover {
+  left: 50%;
+  top: 50%;
+  width: 135.33%;
+  height: auto;
+  transform: translate(-50%, -50%);
+  opacity: 0;
+}
+
+.intro-continue.is-active .intro-continue-image--default {
+  opacity: 0;
+}
+
+.intro-continue.is-active .intro-continue-image--hover {
+  opacity: 1;
+}
+
+.intro-continue:focus-visible {
+  border-radius: 0.75rem;
+  box-shadow: 0 0 0 3px rgba(84, 127, 219, 0.28);
+}
+
+.intro-sr-only {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  padding: 0;
+  margin: -1px;
+  overflow: hidden;
+  clip: rect(0, 0, 0, 0);
+  white-space: nowrap;
+  border: 0;
+}
+
+@media (max-width: 900px) {
+  .intro-stage {
+    width: min(96vw, 46rem);
+  }
+
+  .intro-final-layout {
+    min-height: auto;
+    grid-template-columns: 1fr;
+    grid-template-areas:
+      'title'
+      'rings'
+      'button';
+    row-gap: 0.65rem;
+    padding: 1.15rem 0.85rem 3rem;
+  }
+
+  .intro-title-block {
+    justify-items: center;
+    text-align: center;
+    transform: none;
+  }
+
+  .intro-title-image {
+    width: min(100%, 21rem);
+    transform: none;
+  }
+
+  .intro-rings-image {
+    width: min(100%, 24rem);
+  }
+
+  .intro-details-image {
+    width: min(100%, 18rem);
+  }
+
+  .intro-continue {
+    justify-self: center;
+    width: min(100%, 18rem);
+  }
+
+  .intro-continue-image {
+    width: 100%;
+  }
+
+  .intro-herb-layer {
+    width: clamp(9rem, 28vw, 14rem);
+    opacity: 0.38;
+    transform: translate(-12%, 8%);
+  }
+}
+
+@media (max-width: 480px) {
+  .intro-root {
+    padding: 1rem;
+  }
+
+  .intro-stage {
+    width: min(100vw - 2rem, 28rem);
+  }
+
+  .intro-final-layout {
+    row-gap: 0.5rem;
+    padding: 1rem 0.4rem 2.75rem;
+  }
+
+  .intro-title-image {
+    width: min(100%, 17rem);
+  }
+
+  .intro-rings-image {
+    width: min(100%, 18rem);
+  }
+
+  .intro-details-image {
+    width: min(100%, 14rem);
+  }
+
+  .intro-continue-image {
+    width: 100%;
+  }
+
+  .intro-continue {
+    width: min(100%, 15rem);
+  }
+
+  .intro-herb-layer {
+    width: clamp(8rem, 34vw, 11rem);
+    transform: translate(-10%, 6%);
+  }
+}

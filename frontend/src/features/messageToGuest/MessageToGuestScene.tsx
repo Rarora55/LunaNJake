@@ -11,15 +11,34 @@ type Props = {
   testId?: string
 }
 
+const INITIAL_CARDS = [
+  { id: 'card-1', color: '#ffe4e1', name: 'Sophie', text: "Can't wait to celebrate with you both!" },
+  { id: 'card-2', color: '#e0f4ff', name: 'Marco', text: 'Big love from London. See you soon!' },
+  { id: 'card-3', color: '#e9ffe3', name: 'Aisha', text: 'This is going to be such a beautiful day.' },
+  { id: 'card-4', color: '#fff6d8', name: 'Tom', text: 'Counting down the days already!' },
+]
+
 export default function MessageToGuestScene({ lang, onNavigateBackward, onNavigateForward, testId }: Props) {
   const [progress, setProgress] = useState(0)
-  const [paperFailed, setPaperFailed] = useState(false)
+  const [name, setName] = useState('')
+  const [message, setMessage] = useState('')
+  const [cards, setCards] = useState(INITIAL_CARDS)
   const touchStartY = useRef<number | null>(null)
 
   const revealProgress = useMemo(() => applyEndLag(easeInOutSine(progress), 0.78, 0.18), [progress])
-  const paperReveal = easeInOutSine(mapRange(revealProgress, 0.08, 0.78))
+  const cardsReveal = easeInOutSine(mapRange(revealProgress, 0.08, 0.78))
   const formReveal = easeInOutSine(mapRange(revealProgress, 0.46, 0.98))
-  const overlapY = (1 - paperReveal) * 10
+  const overlapY = (1 - cardsReveal) * 10
+
+  const messageCards = [...cards]
+  if (name.trim() || message.trim()) {
+    messageCards.unshift({
+      id: 'card-live',
+      color: '#f7e8ff',
+      name: name.trim() || 'Name',
+      text: message.trim() || 'Text',
+    })
+  }
 
   const updateProgress = (delta: number) => {
     setProgress((prev) => {
@@ -28,6 +47,31 @@ export default function MessageToGuestScene({ lang, onNavigateBackward, onNaviga
       if (delta > 0 && prev >= 0.99) onNavigateForward()
       return next
     })
+  }
+
+  const onSubmit = (event: FormEvent) => {
+    event.preventDefault()
+    const nextName = name.trim()
+    const nextMessage = message.trim()
+    if (!nextName && !nextMessage) return
+
+    setCards((prev) => [
+      {
+        id: `card-${Date.now()}`,
+        color: '#f7e8ff',
+        name: nextName || 'Name',
+        text: nextMessage || 'Text',
+      },
+      ...prev,
+    ])
+    setName('')
+    setMessage('')
+  }
+
+  const clearAllCards = () => {
+    setCards([])
+    setName('')
+    setMessage('')
   }
 
   const onWheel = (event: WheelEvent<HTMLElement>) => {
@@ -67,7 +111,7 @@ export default function MessageToGuestScene({ lang, onNavigateBackward, onNaviga
       tabIndex={0}
     >
       <section className="message-shell">
-        <header className="message-header" style={{ opacity: clamp(paperReveal * 1.2) }}>
+        <header className="message-header" style={{ opacity: clamp(cardsReveal * 1.2) }}>
           <h1>{resolveMessageText(lang, 'title')}</h1>
           <p>{resolveMessageText(lang, 'intro')}</p>
         </header>
@@ -76,40 +120,38 @@ export default function MessageToGuestScene({ lang, onNavigateBackward, onNaviga
           <div
             className="message-paper-reveal"
             style={{
-              clipPath: `inset(0 0 ${(1 - paperReveal) * 100}% 0)`,
-              opacity: clamp(paperReveal * 1.15),
+              clipPath: `inset(0 0 ${(1 - cardsReveal) * 100}% 0)`,
+              opacity: clamp(cardsReveal * 1.15),
             }}
           >
-            {paperFailed ? (
-              <div className="message-paper-fallback">{resolveMessageText(lang, 'paperAlt')}</div>
-            ) : (
-              <img
-                className="message-paper-image"
-                src="/images/Message/Papel.png"
-                alt={resolveMessageText(lang, 'paperAlt')}
-                onError={() => setPaperFailed(true)}
-              />
-            )}
+            <div className="message-cards-grid">
+              {messageCards.map((card) => (
+                <article key={card.id} className="message-card" style={{ backgroundColor: card.color }}>
+                  <p className="message-card-name">Name: {card.name}</p>
+                  <p className="message-card-text">Text: {card.text}</p>
+                </article>
+              ))}
+            </div>
           </div>
         </section>
 
-        <form
-          className="message-form"
-          style={{ opacity: formReveal, transform: `translateY(${(1 - formReveal) * 16}px)` }}
-          onSubmit={(event: FormEvent) => event.preventDefault()}
-        >
+        <form className="message-form" style={{ opacity: formReveal, transform: `translateY(${(1 - formReveal) * 16}px)` }} onSubmit={onSubmit}>
           <label>
             <span>{resolveMessageText(lang, 'nameLabel')}</span>
-            <input type="text" name="name" />
+            <input type="text" name="name" value={name} onChange={(event) => setName(event.target.value)} />
           </label>
           <label>
             <span>{resolveMessageText(lang, 'messageLabel')}</span>
-            <textarea name="message" rows={5} />
+            <textarea name="message" rows={5} value={message} onChange={(event) => setMessage(event.target.value)} />
           </label>
-          <button type="submit">{resolveMessageText(lang, 'sendLabel')}</button>
+          <div className="message-form-actions">
+            <button type="submit">{resolveMessageText(lang, 'sendLabel')}</button>
+            <button type="button" className="message-clear-button" onClick={clearAllCards}>
+              Clear all cards
+            </button>
+          </div>
         </form>
       </section>
     </main>
   )
 }
-

@@ -1,6 +1,7 @@
 .london-scene {
   min-height: 100vh;
   overflow: hidden;
+  overflow-x: clip;
   position: relative;
   background:
     radial-gradient(circle at 50% 12%, #f4efe2 0%, #e7dbc3 44%, #d8c7a8 100%),
@@ -11,7 +12,17 @@
   position: relative;
   width: min(94vw, 980px);
   height: 84vh;
-  margin: 8vh auto 0;
+  margin: clamp(2vh, 8vh, 8vh) auto 0;
+}
+
+.london-peach-sleep {
+  position: absolute;
+  right: 32%;
+  bottom: -18vh;
+  width: 15vw;
+  height: auto;
+  z-index: 2;
+  pointer-events: none;
 }
 
 .london-connector-line {
@@ -78,7 +89,7 @@
   width: min(22vw, 270px);
   border: 2px solid #111;
   background: #fffdf8;
-  padding: 0.6rem 0.75rem;
+  padding: clamp(0.55rem, 1.5vw, 0.75rem);
 }
 
 .london-side-card-left {
@@ -126,6 +137,18 @@
 }
 
 @media (max-width: 700px) {
+  .london-shell {
+    width: min(96vw, 560px);
+    height: 88vh;
+    margin-top: 3vh;
+  }
+
+  .london-peach-sleep {
+    right: 3%;
+    bottom: 10vh;
+    width: clamp(56px, 22vw, 94px);
+  }
+
   .london-connector-line {
     width: 2px;
     height: 24vh;
@@ -133,12 +156,12 @@
 
   .london-gif-frame-wrap {
     top: 24vh;
-    width: min(88vw, 450px);
+    width: min(86vw, 430px);
   }
 
   .london-side-card {
     top: auto;
-    width: min(84vw, 380px);
+    width: min(88vw, 380px);
   }
 
   .london-side-card-left {
@@ -150,7 +173,41 @@
 
   .london-side-card-right {
     left: 50%;
-    bottom: 4vh;
+    bottom: 3vh;
     transform: translateX(-50%);
+  }
+}
+
+@media (max-width: 430px) {
+  .london-shell {
+    height: 90vh;
+    margin-top: 1.5vh;
+  }
+
+  .london-connector-line {
+    height: 21vh;
+  }
+
+  .london-gif-frame-wrap {
+    top: 21.5vh;
+    width: min(87vw, 370px);
+  }
+
+  .london-side-card {
+    width: min(90vw, 345px);
+    padding: 0.54rem 0.64rem;
+  }
+
+  .london-side-card p {
+    font-size: clamp(0.76rem, 3.25vw, 0.9rem);
+    line-height: 1.28;
+  }
+
+  .london-side-card-left {
+    bottom: 16vh;
+  }
+
+  .london-side-card-right {
+    bottom: 2.5vh;
   }
 }

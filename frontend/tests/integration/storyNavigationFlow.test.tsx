@@ -30,7 +30,7 @@ describe('story navigation flow', () => {
     const second = renderAt('/it/story/she-was-not-wrong')
     page = await screen.findByTestId('story-page')
     fireEvent.keyDown(page, { key: 'ArrowDown' })
-    expect(await screen.findByRole('heading')).toHaveTextContent('IT She Said Yes')
+    expect(await screen.findByRole('heading', { level: 1 })).toHaveTextContent('IT She Said Yes')
 
     const terminal = screen.getByTestId('terminal-page')
     fireEvent.keyDown(terminal, { key: 'ArrowDown' })
@@ -38,7 +38,7 @@ describe('story navigation flow', () => {
 
     const addressPage = screen.getByTestId('address-intro-page')
     fireEvent.keyDown(addressPage, { key: 'ArrowUp' })
-    expect(await screen.findByRole('heading')).toHaveTextContent('IT She Said Yes')
+    expect(await screen.findByRole('heading', { level: 1 })).toHaveTextContent('IT She Said Yes')
 
     const terminalAgain = screen.getByTestId('terminal-page')
     fireEvent.keyDown(terminalAgain, { key: 'ArrowUp' })
@@ -86,6 +86,25 @@ describe('story navigation flow', () => {
 
     now.mockRestore()
     vi.useRealTimers()
+  })
+
+  it('continues from timeline into recommendation, confirmation, colombia, questions, then LunaNJake', async () => {
+    renderAt('/en/timeline')
+
+    fireEvent.click(await screen.findByRole('link', { name: 'Continue' }))
+    expect(await screen.findByTestId('recommendation-section')).toBeInTheDocument()
+
+    fireEvent.click(await screen.findByRole('link', { name: 'Continue' }))
+    expect(await screen.findByTestId('confirmation-section')).toBeInTheDocument()
+
+    fireEvent.click(await screen.findByRole('link', { name: 'Continue' }))
+    expect(await screen.findByTestId('colombia-section')).toBeInTheDocument()
+
+    fireEvent.click(await screen.findByRole('link', { name: 'Continue' }))
+    expect(await screen.findByTestId('questions-section')).toBeInTheDocument()
+
+    fireEvent.click(await screen.findByRole('link', { name: 'Continue' }))
+    expect(await screen.findByTestId('luna-n-jake-page')).toBeInTheDocument()
   })
 })
 

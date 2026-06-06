@@ -1,4 +1,4 @@
-﻿import { BACKWARD_KEYS, FORWARD_KEYS, STORY_COOLDOWN_MS, firstStoryPath, sheSaidYesPath, type StoryDirection } from '../../config/storyInputs'
+import { BACKWARD_KEYS, FORWARD_KEYS, STORY_COOLDOWN_MS, canonicalIntroPath, firstStoryPath, sheSaidYesPath, type StoryDirection } from '../../config/storyInputs'
 import { FIRST_STORY_SLUG, LAST_STORY_SLUG, STORY_SEQUENCE, type Lang } from '../../config/storySequence'
 
 export type StoryNavResult = {
@@ -26,15 +26,19 @@ export function canTriggerNavigation(nowMs: number, lastTriggerMs: number): bool
   return nowMs - lastTriggerMs >= STORY_COOLDOWN_MS
 }
 
+export function canTriggerNavigationWithCooldown(nowMs: number, lastTriggerMs: number, cooldownMs: number): boolean {
+  return nowMs - lastTriggerMs >= cooldownMs
+}
+
 export function resolveStoryNavigation(lang: Lang, currentSlug: string, direction: StoryDirection): StoryNavResult {
   const idx = STORY_SEQUENCE.findIndex((entry) => entry.slug === currentSlug)
   if (idx === -1) {
-    return { nextPath: firstStoryPath(lang), direction }
+    return { nextPath: canonicalIntroPath(lang), direction }
   }
 
   if (direction === 'backward') {
     if (currentSlug === FIRST_STORY_SLUG) {
-      return { nextPath: firstStoryPath(lang), direction }
+      return { nextPath: canonicalIntroPath(lang), direction }
     }
     const prevSlug = STORY_SEQUENCE[idx].previousSlug ?? FIRST_STORY_SLUG
     return { nextPath: `/${lang}/story/${prevSlug}`, direction }
@@ -51,4 +55,5 @@ export function resolveStoryNavigation(lang: Lang, currentSlug: string, directio
 export function resolveInvalidStorySlug(lang: Lang): string {
   return firstStoryPath(lang)
 }
+
 

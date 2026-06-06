@@ -1,4 +1,5 @@
 export type TimelineSide = 'left' | 'right'
+export type TimelineMarkerPosition = 'top' | 'bottom'
 
 export type TransitionPhaseId = 'scatter-exit' | 'address-reveal' | 'line-growth'
 
@@ -26,3 +27,25 @@ export type TimelineItemConfig = {
 }
 
 export type MediaStatus = 'ready' | 'failed'
+
+export type TimelineMarkerConfig = {
+  id: number
+  x: number
+  y: number
+  threshold: number
+  rotation: number
+  scale: number
+}
+
+export type TimelineMarkerContentConfig = {
+  markerId: number
+  labelKey: string
+  image: string
+  xOffset: number
+  yOffset: number
+  position: TimelineMarkerPosition
+}
+
+export type ResolvedTimelineMarkerContent = Omit<TimelineMarkerContentConfig, 'labelKey'> & {
+  text: string
+}

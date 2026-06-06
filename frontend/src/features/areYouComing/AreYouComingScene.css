@@ -1,0 +1,165 @@
+.are-coming-scene {
+  min-height: 100vh;
+  overflow: hidden;
+  overflow-x: clip;
+  position: relative;
+  font-family: "Cormorant Garamond", serif;
+  background:
+    radial-gradient(circle at 50% 12%, #f4efe2 0%, #e7dbc3 44%, #d8c7a8 100%),
+    repeating-linear-gradient(0deg, rgba(0, 0, 0, 0.03) 0 1px, transparent 1px 5px);
+}
+
+.are-coming-content {
+  min-height: 100vh;
+  width: min(96vw, 1220px);
+  margin: 0 auto;
+  padding: 16vh 0 8vh;
+  display: grid;
+  place-items: center;
+}
+
+.are-coming-rsvp-card-wrap {
+  display: grid;
+  grid-template-columns: minmax(280px, 1fr) minmax(280px, 1fr);
+  align-items: center;
+  gap: clamp(14px, 2vw, 28px);
+  justify-self: center;
+  align-self: center;
+  width: min(94vw, 1100px);
+}
+
+.are-coming-photo {
+  width: 100%;
+  max-width: 100%;
+  max-height: 68vh;
+  height: auto;
+  display: block;
+  object-fit: cover;
+  object-position: center;
+  border: 2px solid #111;
+  background: #fff;
+}
+
+.are-coming-rsvp-card {
+  position: relative;
+  display: block;
+  width: 100%;
+  border: 0;
+  text-decoration: none;
+}
+
+.are-coming-rsvp-peach {
+  position: absolute;
+  top: -85px;
+  right: -47px;
+  width: clamp(92px, 16vw, 170px);
+  height: auto;
+  z-index: 4;
+  pointer-events: none;
+  transition: opacity 180ms ease-out;
+}
+
+.are-coming-rsvp-peach.hover {
+  opacity: 0;
+}
+
+.are-coming-rsvp-card-image {
+  display: block;
+  width: 100%;
+  height: auto;
+  object-fit: contain;
+}
+
+.are-coming-rsvp-card-image.hover {
+  position: absolute;
+  inset: 0;
+  opacity: 0;
+  transition: opacity 180ms ease-out;
+}
+
+.are-coming-rsvp-card:hover .are-coming-rsvp-card-image.hover,
+.are-coming-rsvp-card:focus-visible .are-coming-rsvp-card-image.hover {
+  opacity: 1;
+}
+
+.are-coming-rsvp-card:hover .are-coming-rsvp-card-image.default,
+.are-coming-rsvp-card:focus-visible .are-coming-rsvp-card-image.default {
+  opacity: 0;
+}
+
+.are-coming-rsvp-card:hover .are-coming-rsvp-peach.default,
+.are-coming-rsvp-card:focus-visible .are-coming-rsvp-peach.default {
+  opacity: 0;
+}
+
+.are-coming-rsvp-card:hover .are-coming-rsvp-peach.hover,
+.are-coming-rsvp-card:focus-visible .are-coming-rsvp-peach.hover {
+  opacity: 1;
+}
+
+.are-coming-rsvp-card:focus-visible {
+  outline: 2px solid #111;
+  outline-offset: 5px;
+}
+
+@media (hover: none) {
+  .are-coming-rsvp-card-image.hover {
+    opacity: 0 !important;
+  }
+
+  .are-coming-rsvp-card-image.default {
+    opacity: 1 !important;
+  }
+
+  .are-coming-rsvp-peach.default {
+    opacity: 1 !important;
+  }
+
+  .are-coming-rsvp-peach.hover {
+    opacity: 0 !important;
+  }
+}
+
+@media (max-width: 760px) {
+  .are-coming-content {
+    padding-top: 20vh;
+  }
+
+  .are-coming-rsvp-card-wrap {
+    grid-template-columns: 1fr;
+    width: min(94vw, 560px);
+  }
+
+  .are-coming-photo,
+  .are-coming-rsvp-card {
+    width: min(94vw, 560px);
+  }
+
+  .are-coming-rsvp-peach {
+    width: clamp(82px, 30vw, 136px);
+    top: clamp(-16px, -4vw, -8px);
+    right: clamp(-6px, -2vw, 2px);
+  }
+}
+
+@media (max-width: 430px) {
+  .are-coming-content {
+    width: min(92vw, 420px);
+    padding-top: 13vh;
+    padding-bottom: 6vh;
+  }
+
+  .are-coming-rsvp-card-wrap {
+    width: min(92vw, 420px);
+    gap: 0.65rem;
+  }
+
+  .are-coming-photo,
+  .are-coming-rsvp-card {
+    width: min(92vw, 420px);
+  }
+
+  .are-coming-rsvp-peach {
+    width: clamp(72px, 28vw, 116px);
+  }
+}

@@ -12,13 +12,32 @@ type Props = {
   testId?: string
 }
 
+type DecorativeDrawing = {
+  id: string
+  src: string
+  alt: string
+  revealAt: number
+  className: string
+}
+
+const DECORATIVE_DRAWINGS: DecorativeDrawing[] = [
+  { id: 'seagul1', src: '/images/abroad/seagulS1.png', alt: 'SeagulS1', revealAt: 0.16, className: 'left-large top' },
+  { id: 'seagul2', src: '/images/abroad/seagulS2.png', alt: 'SeagulS2', revealAt: 0.34, className: 'right-mid upper' },
+  { id: 'seagul3', src: '/images/abroad/seagulS3.png', alt: 'SeagulS3', revealAt: 0.54, className: 'left-small middle' },
+  { id: 'peach', src: '/images/abroad/PeachEating.png', alt: 'PeachEating', revealAt: 0.88, className: 'right-peach bottom' },
+]
+
 export default function ComingFromAbroadScene({ lang, onNavigateBackward, onNavigateForward, testId }: Props) {
   const [progress, setProgress] = useState(0)
   const [lineProgress, setLineProgress] = useState(0)
   const [mapFailed, setMapFailed] = useState(false)
   const lineProgressRef = useRef(0)
   const touchStartY = useRef<number | null>(null)
+  const touchLastY = useRef<number | null>(null)
   const reducedMotion = prefersReducedMotion()
+  const isMobile = typeof window !== 'undefined' && typeof window.matchMedia === 'function'
+    ? window.matchMedia('(max-width: 768px)').matches
+    : false
 
   useEffect(() => {
     lineProgressRef.current = lineProgress
@@ -37,8 +56,10 @@ export default function ComingFromAbroadScene({ lang, onNavigateBackward, onNavi
     let velocity = 0
     let current = lineProgressRef.current
     const tailPhase = clamp((easedTarget - 0.78) / 0.22)
-    const stiffness = 0.115 - tailPhase * 0.03
-    const damping = 0.8 + tailPhase * 0.1
+    const stiffnessBase = isMobile ? 0.17 : 0.115
+    const dampingBase = isMobile ? 0.72 : 0.8
+    const stiffness = stiffnessBase - tailPhase * (isMobile ? 0.02 : 0.03)
+    const damping = dampingBase + tailPhase * (isMobile ? 0.08 : 0.1)
 
     const tick = () => {
       const displacement = easedTarget - current
@@ -55,7 +76,7 @@ export default function ComingFromAbroadScene({ lang, onNavigateBackward, onNavi
 
     frame = window.requestAnimationFrame(tick)
     return () => window.cancelAnimationFrame(frame)
-  }, [easedTarget, reducedMotion])
+  }, [easedTarget, reducedMotion, isMobile])
 
   const connectorProgress = easeInOutSine(mapRange(lineProgress, 0, 0.42))
   const frameProgress = easeInOutSine(mapRange(lineProgress, 0.3, 0.86))
@@ -66,18 +87,20 @@ export default function ComingFromAbroadScene({ lang, onNavigateBackward, onNavi
   const leftCardText = resolveAbroadText(lang, 'leftCard')
   const rightCardText = resolveAbroadText(lang, 'rightCard')
 
-  const updateProgress = (delta: number) => {
+  const updateProgress = (delta: number, allowNavigate = true) => {
     setProgress((prev) => {
       const next = clamp(prev + delta)
-      if (delta < 0 && prev <= 0.01) onNavigateBackward()
-      if (delta > 0 && prev >= 0.99) onNavigateForward()
+      if (allowNavigate && delta < 0 && prev <= 0.01) onNavigateBackward()
+      if (allowNavigate && delta > 0 && prev >= 0.99) onNavigateForward()
       return next
     })
   }
 
   const onWheel = (event: WheelEvent<HTMLElement>) => {
     event.preventDefault()
-    updateProgress(clamp(event.deltaY * 0.0015, -0.1, 0.1))
+    const wheelScale = isMobile ? 0.0024 : 0.0015
+    const wheelClamp = isMobile ? 0.14 : 0.1
+    updateProgress(clamp(event.deltaY * wheelScale, -wheelClamp, wheelClamp))
   }
 
   const onKeyDown = (event: KeyboardEvent<HTMLElement>) => {
@@ -98,20 +121,49 @@ export default function ComingFromAbroadScene({ lang, onNavigateBackward, onNavi
       onWheel={onWheel}
       onKeyDown={onKeyDown}
       onTouchStart={(event) => {
-        touchStartY.current = event.changedTouches[0]?.clientY ?? null
+        const y = event.changedTouches[0]?.clientY ?? null
+        touchStartY.current = y
+        touchLastY.current = y
+      }}
+      onTouchMove={(event) => {
+        const current = event.changedTouches[0]?.clientY
+        const last = touchLastY.current
+        if (typeof current !== 'number' || last === null) return
+        const delta = last - current
+        touchLastY.current = current
+        if (Math.abs(delta) < 1.5) return
+        const moveScale = isMobile ? 0.0042 : 0.003
+        updateProgress(clamp(delta * moveScale, -0.08, 0.08), false)
       }}
       onTouchEnd={(event) => {
         const start = touchStartY.current
         const end = event.changedTouches[0]?.clientY
         touchStartY.current = null
+        touchLastY.current = null
         if (start === null || typeof end !== 'number') return
         const delta = start - end
-        if (Math.abs(delta) < 16) return
-        updateProgress(clamp(delta * 0.0024, -0.12, 0.12))
+        const minSwipe = isMobile ? 10 : 16
+        if (Math.abs(delta) < minSwipe) return
+        const endScale = isMobile ? 0.0032 : 0.0024
+        updateProgress(clamp(delta * endScale, -0.12, 0.12))
       }}
       tabIndex={0}
     >
       <section className="abroad-shell">
+        <div className="abroad-decorative-layer" aria-hidden="true">
+          {DECORATIVE_DRAWINGS.map((drawing) => {
+            const isVisible = lineProgress >= drawing.revealAt
+            return (
+              <img
+                key={drawing.id}
+                src={drawing.src}
+                alt={drawing.alt}
+                className={`abroad-drawing ${drawing.className} ${isVisible ? 'is-visible' : ''}`}
+              />
+            )
+          })}
+        </div>
+
         <div className="abroad-connector-line" style={{ transform: `scaleY(${connectorProgress})` }} />
 
         <div className="abroad-map-frame-wrap">

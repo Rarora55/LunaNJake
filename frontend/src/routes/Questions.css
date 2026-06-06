@@ -1,0 +1,137 @@
+.questions-section {
+  min-height: 100vh;
+  width: 100%;
+  background:
+    radial-gradient(circle at 50% 12%, #f7f2e7 0%, #f2eadc 42%, #ebe0cf 100%),
+    linear-gradient(180deg, rgba(255, 255, 255, 0.18) 0%, rgba(255, 255, 255, 0) 32%);
+  font-family: 'Brittany Signature', 'Amsterdam Four', 'Caveat', cursive;
+  color: #4c77e6;
+  opacity: 0;
+  transition: opacity 520ms ease;
+}
+
+.questions-section.is-visible {
+  opacity: 1;
+}
+
+.questions-shell {
+  width: min(100%, 1680px);
+  margin: 0 auto;
+  padding: clamp(3rem, 8vw, 6rem) clamp(1.25rem, 5vw, 4.5rem) clamp(2.5rem, 6vw, 4rem);
+}
+
+.questions-header {
+  opacity: 0;
+  transform: translateY(22px);
+  transition:
+    opacity 420ms ease,
+    transform 420ms ease;
+}
+
+.questions-header.is-visible {
+  opacity: 1;
+  transform: translateY(0);
+}
+
+.questions-title {
+  margin: 0;
+  color: #4c77e6;
+  font-size: clamp(3.5rem, 8vw, 6.2rem);
+  font-weight: 400;
+  line-height: 0.92;
+  text-align: center;
+}
+
+.questions-list {
+  display: grid;
+  gap: clamp(2.8rem, 5vw, 4.75rem);
+  margin-top: clamp(2.5rem, 5vw, 4rem);
+}
+
+.questions-item {
+  display: grid;
+  gap: 0.45rem;
+}
+
+.questions-question,
+.questions-answer {
+  max-width: min(100%, 1480px);
+  margin: 0;
+  color: #4c77e6;
+  text-wrap: pretty;
+}
+
+.questions-question {
+  font-size: clamp(2rem, 3.3vw, 3rem);
+  font-weight: 700;
+  line-height: 1.06;
+}
+
+.questions-answer-group {
+  display: grid;
+  gap: 0.2rem;
+}
+
+.questions-answer {
+  font-size: clamp(1.45rem, 2.35vw, 2.1rem);
+  font-weight: 400;
+  line-height: 1.22;
+}
+
+.questions-nav {
+  display: flex;
+  justify-content: center;
+  gap: 1.5rem;
+  margin-top: clamp(2.5rem, 5vw, 4rem);
+  opacity: 0;
+  transform: translateY(20px);
+  transition:
+    opacity 420ms ease 180ms,
+    transform 420ms ease 180ms;
+}
+
+.questions-nav.is-visible {
+  opacity: 1;
+  transform: translateY(0);
+}
+
+.questions-nav-link {
+  color: #4c77e6;
+  text-decoration: none;
+  font-size: clamp(1.2rem, 2vw, 1.55rem);
+  font-weight: 700;
+}
+
+.questions-nav-link:hover,
+.questions-nav-link:focus-visible {
+  text-decoration: underline;
+  outline: none;
+}
+
+@media (max-width: 768px) {
+  .questions-shell {
+    padding-inline: 1.2rem;
+  }
+
+  .questions-title {
+    text-align: left;
+  }
+
+  .questions-list {
+    gap: 2.2rem;
+  }
+
+  .questions-question {
+    font-size: clamp(1.6rem, 7vw, 2.1rem);
+    line-height: 1.08;
+  }
+
+  .questions-answer {
+    font-size: clamp(1.15rem, 5.2vw, 1.45rem);
+    line-height: 1.28;
+  }
+
+  .questions-nav {
+    justify-content: flex-start;
+  }
+}

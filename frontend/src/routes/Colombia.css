@@ -1,0 +1,147 @@
+.colombia-section {
+  min-height: 100vh;
+  width: 100%;
+  display: grid;
+  place-items: center;
+  padding: clamp(1.5rem, 4vw, 2.5rem);
+  background:
+    radial-gradient(circle at 50% 10%, #faf5ec 0%, #f5eddf 40%, #eee2d0 100%),
+    linear-gradient(180deg, rgba(255, 255, 255, 0.24) 0%, rgba(255, 255, 255, 0) 32%);
+  opacity: 0;
+  transition: opacity 520ms ease;
+}
+
+.colombia-section.is-visible {
+  opacity: 1;
+}
+
+.colombia-shell {
+  width: min(100%, 1180px);
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) minmax(280px, 0.95fr);
+  align-items: center;
+  gap: clamp(2rem, 5vw, 5rem);
+  opacity: 0;
+  transform: translateY(20px);
+  transition:
+    opacity 480ms ease,
+    transform 480ms ease;
+}
+
+.colombia-shell.is-visible {
+  opacity: 1;
+  transform: translateY(0);
+}
+
+.colombia-copy {
+  display: grid;
+  gap: clamp(1.2rem, 2.5vw, 1.8rem);
+  justify-items: start;
+  text-align: left;
+}
+
+.colombia-title {
+  margin: 0;
+  color: #4c77e6;
+  font-family: 'Brittany Signature', 'Amsterdam Four', 'Caveat', cursive;
+  font-size: clamp(4rem, 9vw, 7rem);
+  font-weight: 400;
+  line-height: 0.9;
+}
+
+.colombia-body {
+  margin: 0;
+  max-width: 32rem;
+  color: #4c77e6;
+  font-family: 'Trebuchet MS', 'Segoe UI', sans-serif;
+  font-size: clamp(1.15rem, 2vw, 1.45rem);
+  line-height: 1.6;
+  text-wrap: pretty;
+}
+
+.colombia-nav {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 1.2rem;
+  margin-top: 0.35rem;
+}
+
+.colombia-nav-link {
+  color: #4c77e6;
+  text-decoration: none;
+  font-size: clamp(1rem, 1.6vw, 1.2rem);
+  font-weight: 700;
+}
+
+.colombia-nav-link:hover,
+.colombia-nav-link:focus-visible {
+  text-decoration: underline;
+  outline: none;
+}
+
+.colombia-media {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.colombia-image {
+  width: min(100%, 640px);
+  max-height: min(72vh, 640px);
+  object-fit: contain;
+  display: block;
+  filter: drop-shadow(0 18px 30px rgba(76, 119, 230, 0.14));
+}
+
+@media (max-width: 860px) {
+  .colombia-shell {
+    grid-template-columns: 1fr;
+    gap: 1.8rem;
+  }
+
+  .colombia-copy {
+    justify-items: center;
+    width: 100%;
+  }
+
+  .colombia-body {
+    max-width: 36rem;
+  }
+
+  .colombia-nav {
+    justify-content: center;
+  }
+}
+
+@media (max-width: 640px) {
+  .colombia-section {
+    padding: 1.1rem;
+  }
+
+  .colombia-shell {
+    gap: 1.4rem;
+  }
+
+  .colombia-copy {
+    justify-items: start;
+  }
+
+  .colombia-title {
+    font-size: clamp(3.2rem, 16vw, 4.7rem);
+  }
+
+  .colombia-body {
+    max-width: none;
+    font-size: clamp(1rem, 4.8vw, 1.18rem);
+    line-height: 1.52;
+  }
+
+  .colombia-nav {
+    justify-content: flex-start;
+  }
+
+  .colombia-image {
+    width: min(100%, 360px);
+    max-height: 42vh;
+  }
+}

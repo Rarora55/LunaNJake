@@ -10,10 +10,25 @@ const STORY_TEXT = {
       yourNewFlatmate: 'and Luna replied, "your new flatmate".',
       sheWasNotWrong: 'She was not wrong...!',
     },
+    introFlow: {
+      sequence1:
+        'The first time they saw each other, it was 10 am and Luna was still wearing her night-before attire and makeup, facing the morning after staying over at Jake’s flat following a party where she had met his flatmates. Ready to face the walk of shame, Jake asked her “who are you?” and Luna replied, “your new flatmate”.',
+      sequence2: 'She was not wrong...',
+      title: 'Luna and Jake',
+      date: 'Monday, 31 May 2027',
+      continue: 'Continue',
+    },
     address: {
       venue: "Pelham House, Saint Andrew's Lane, Lewes, UK",
       detailsHover: 'Hover for details',
       detailsTap: 'Tap for details',
+      timelineMarkerBus: '11:00 Bus',
+      timelineMarkerCeremony: '12:00 Ceremony',
+      timelineMarkerAperitive: '13:00 Aperitive',
+      timelineMarkerDinner: '14:30 Dinner',
+      timelineMarkerAfterDinner: '15:30 After Dinner',
+      timelineMarkerParty: '17:00 Party',
+      timelineMarkerLeaving: '23:00 Leaving',
       busFrontTime: '11:00am',
       busFrontLabel: 'Shuttle Bus',
       busBackTitle: '11:00am Shuttle Bus',
@@ -122,6 +137,33 @@ const STORY_TEXT = {
       sendLabel: 'Send',
       paperAlt: 'Message paper board',
     },
+    areYouComing: {
+      giftIntro: 'Your presence is the best present we could ask for.',
+      giftBody: 'But if you’re feeling generous, please see below details of a gift towards our honeymoon.',
+      accountIntro: 'For plastic givers please send gifts to the below account:',
+      accountName: 'Account name: Luna Serratore',
+      accountNumber: 'Account number: 53760072',
+      sortCode: 'Sort code: 04-00-03',
+      iban: 'GB26 MONZ 0400 0353 7600 72',
+      reference: 'Reference: Your name/surname and date of the wedding',
+      rsvpDeadline: 'Please RSVP by 1st November 2026.',
+      rsvpLabel: 'RSVP',
+    },
+    confirmation: {
+      title: 'Confirmation',
+      body: "We are so excited to have you! Please RSVP by 1st November 2026. Make sure to check out our pages for all the info you'll need to make sure you have a fab Bank Holiday with us!",
+    },
+    colombia: {
+      title: 'Colombia',
+      intro:
+        "Your presence is the best present we could ask for! But if you're feeling generous, please see below details of a gift towards our honeymoon!",
+      accountIntro: 'For plastic givers please send gifts to the below account:',
+      accountName: 'Account name: Luna Serratore',
+      accountNumber: 'Account number: 53760072',
+      sortCode: 'Sort code: 04-00-03',
+      iban: 'GB26 MONZ 0400 0353 7600 72',
+      reference: 'Reference: Your name/surname and date of the wedding',
+    },
   },
   it: {
     story: {
@@ -132,10 +174,25 @@ const STORY_TEXT = {
       yourNewFlatmate: 'e Luna rispose: "la tua nuova coinquilina".',
       sheWasNotWrong: 'Non aveva torto...!',
     },
+    introFlow: {
+      sequence1:
+        'La prima volta che si sono visti erano le 10 del mattino e Luna indossava ancora il vestito e il trucco della sera prima, affrontando il giorno dopo aver dormito da Jake dopo una festa in cui aveva conosciuto i suoi coinquilini. Pronta per la walk of shame, Jake le chiese “chi sei?” e Luna rispose: “la tua nuova coinquilina”.',
+      sequence2: 'Non aveva torto...',
+      title: 'Luna and Jake',
+      date: 'Lunedì, 31 maggio 2027',
+      continue: 'Continua',
+    },
     address: {
       venue: "Pelham House, Saint Andrew's Lane, Lewes, UK",
       detailsHover: 'Passa il mouse per i dettagli',
       detailsTap: 'Tocca per i dettagli',
+      timelineMarkerBus: '11:00 Bus',
+      timelineMarkerCeremony: '12:00 Cerimonia',
+      timelineMarkerAperitive: '13:00 Aperitivo',
+      timelineMarkerDinner: '14:30 Cena',
+      timelineMarkerAfterDinner: '15:30 Dopo cena',
+      timelineMarkerParty: '17:00 Festa',
+      timelineMarkerLeaving: '23:00 Rientro',
       busFrontTime: '11:00am',
       busFrontLabel: 'Shuttle Bus',
       busBackTitle: '11:00am Shuttle Bus',
@@ -244,10 +301,38 @@ const STORY_TEXT = {
       sendLabel: 'Invia',
       paperAlt: 'Bacheca messaggi',
     },
+    areYouComing: {
+      giftIntro: 'Your presence is the best present we could ask for.',
+      giftBody: 'But if you’re feeling generous, please see below details of a gift towards our honeymoon.',
+      accountIntro: 'For plastic givers please send gifts to the below account:',
+      accountName: 'Account name: Luna Serratore',
+      accountNumber: 'Account number: 53760072',
+      sortCode: 'Sort code: 04-00-03',
+      iban: 'GB26 MONZ 0400 0353 7600 72',
+      reference: 'Reference: Your name/surname and date of the wedding',
+      rsvpDeadline: 'Please RSVP by 1st November 2026.',
+      rsvpLabel: 'RSVP',
+    },
+    confirmation: {
+      title: 'Conferma',
+      body: "Siamo felicissimi di averti con noi! Ti chiediamo di confermare la tua presenza entro il 1 novembre 2026. Dai anche un'occhiata alle nostre pagine per trovare tutte le informazioni utili e goderti al meglio il Bank Holiday con noi!",
+    },
+    colombia: {
+      title: 'Colombia',
+      intro:
+        "Your presence is the best present we could ask for! But if you're feeling generous, please see below details of a gift towards our honeymoon!",
+      accountIntro: 'For plastic givers please send gifts to the below account:',
+      accountName: 'Account name: Luna Serratore',
+      accountNumber: 'Account number: 53760072',
+      sortCode: 'Sort code: 04-00-03',
+      iban: 'GB26 MONZ 0400 0353 7600 72',
+      reference: 'Reference: Your name/surname and date of the wedding',
+    },
   },
 } as const
 
 type StoryKey = keyof (typeof STORY_TEXT)['en']['story']
+type IntroFlowKey = keyof (typeof STORY_TEXT)['en']['introFlow']
 
 function translationKeyToField(key: string): StoryKey {
   const field = key.replace('story.', '')
@@ -259,10 +344,13 @@ export function resolveStoryText(lang: Lang, translationKey: string): string {
   return STORY_TEXT[lang].story[field]
 }
 
-type AddressKey = keyof (typeof STORY_TEXT)['en']['address']
+export type AddressKey = keyof (typeof STORY_TEXT)['en']['address']
 type AbroadKey = keyof (typeof STORY_TEXT)['en']['abroad']
 type LondonKey = keyof (typeof STORY_TEXT)['en']['london']
 type MessageKey = keyof (typeof STORY_TEXT)['en']['message']
+type AreYouComingKey = keyof (typeof STORY_TEXT)['en']['areYouComing']
+type ConfirmationKey = keyof (typeof STORY_TEXT)['en']['confirmation']
+type ColombiaKey = keyof (typeof STORY_TEXT)['en']['colombia']
 
 export function getAddressText(lang: Lang): string {
   return STORY_TEXT[lang].address.venue
@@ -286,4 +374,20 @@ export function resolveStayContent<L extends Lang>(lang: L): (typeof STORY_TEXT)
 
 export function resolveMessageText(lang: Lang, key: MessageKey): string {
   return STORY_TEXT[lang].message[key]
+}
+
+export function resolveAreYouComingText(lang: Lang, key: AreYouComingKey): string {
+  return STORY_TEXT[lang].areYouComing[key]
+}
+
+export function resolveConfirmationText(lang: Lang, key: ConfirmationKey): string {
+  return STORY_TEXT[lang].confirmation[key]
+}
+
+export function resolveColombiaText(lang: Lang, key: ColombiaKey): string {
+  return STORY_TEXT[lang].colombia[key]
+}
+
+export function resolveIntroFlowText(lang: Lang, key: IntroFlowKey): string {
+  return STORY_TEXT[lang].introFlow[key]
 }

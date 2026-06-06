@@ -26,12 +26,10 @@ describe('story page rendering', () => {
     expect(pages.length).toBeGreaterThan(0)
   })
 
-  it('renders all new placeholder routes', async () => {
+  it('renders the LunaNJake route and remaining placeholder routes', async () => {
     const routes = [
-      { path: '/en/coming-from-abroad', title: 'Coming from abroad?' },
       { path: '/en/travelling-from-london', title: 'Travelling from London?' },
       { path: '/en/where-to-stay', title: 'Where to stay' },
-      { path: '/en/message-to-the-guest', title: 'Message to the guest' },
       { path: '/en/are-you-coming', title: 'Are you coming?' },
     ]
 
@@ -42,6 +40,10 @@ describe('story page rendering', () => {
     const address = renderAt('/en/address')
     expect(await screen.findByTestId('address-timeline-page')).toBeInTheDocument()
     address.unmount()
+
+    const lunaNJake = renderAt('/en/LunaNJake')
+    expect(await screen.findByTestId('luna-n-jake-page')).toBeInTheDocument()
+    lunaNJake.unmount()
 
     for (const route of routes) {
       const view = renderAt(route.path)

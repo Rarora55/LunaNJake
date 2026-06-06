@@ -1,6 +1,7 @@
 .abroad-scene {
   min-height: 100vh;
   overflow: hidden;
+  overflow-x: clip;
   position: relative;
   background:
     radial-gradient(circle at 50% 12%, #f4efe2 0%, #e7dbc3 44%, #d8c7a8 100%),
@@ -12,6 +13,50 @@
   width: min(94vw, 980px);
   height: 84vh;
   margin: 8vh auto 0;
+}
+
+.abroad-decorative-layer {
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+  z-index: 1;
+}
+
+.abroad-drawing {
+  position: absolute;
+  opacity: 0;
+  transform: translateY(10px) scale(0.98);
+  transition: opacity 280ms ease-out, transform 320ms ease-out;
+  will-change: opacity, transform;
+}
+
+.abroad-drawing.is-visible {
+  opacity: 1;
+  transform: translateY(0) scale(1);
+}
+
+.abroad-drawing.left-large.top {
+  top: 1vh;
+  left: -20%;
+  width: 10vw;
+}
+
+.abroad-drawing.right-mid.upper {
+  top: 8vh;
+  right: -25%;
+  width: min(20vw, 230px);
+}
+
+.abroad-drawing.left-small.middle {
+  top: 31vh;
+  left: -20%;
+  width: min(18vw, 200px);
+}
+
+.abroad-drawing.right-peach.bottom {
+  right: 80%;
+  bottom: -10vh;
+  width: 15vw;
 }
 
 .abroad-connector-line {
@@ -102,6 +147,33 @@
 }
 
 @media (max-width: 700px) {
+  .abroad-shell {
+    width: min(96vw, 560px);
+    height: 88vh;
+    margin-top: 3vh;
+  }
+
+  .abroad-drawing.left-large.top {
+    width: min(40vw, 180px);
+    left: -3%;
+  }
+
+  .abroad-drawing.right-mid.upper {
+    width: min(34vw, 150px);
+    right: -3%;
+  }
+
+  .abroad-drawing.left-small.middle {
+    width: min(30vw, 135px);
+    left: -2%;
+  }
+
+  .abroad-drawing.right-peach.bottom {
+    width: min(24vw, 98px);
+    right: 1%;
+    bottom: 12vh;
+  }
+
   .abroad-connector-line {
     width: 2px;
     height: 24vh;
@@ -128,5 +200,31 @@
     left: 50%;
     bottom: 4vh;
     transform: translateX(-50%);
+  }
+}
+
+@media (max-width: 430px) {
+  .abroad-shell {
+    height: 90vh;
+    margin-top: 1.5vh;
+  }
+
+  .abroad-connector-line {
+    height: 21vh;
+  }
+
+  .abroad-map-frame-wrap {
+    top: 21.5vh;
+    width: min(87vw, 370px);
+  }
+
+  .abroad-side-card {
+    width: min(90vw, 345px);
+    padding: 0.54rem 0.64rem;
+  }
+
+  .abroad-side-card p {
+    font-size: clamp(0.76rem, 3.25vw, 0.9rem);
+    line-height: 1.28;
   }
 }

@@ -27,7 +27,11 @@ export default function TravellingFromLondonScene({ lang, onNavigateBackward, on
   const [gifFailed, setGifFailed] = useState(false)
   const lineProgressRef = useRef(0)
   const touchStartY = useRef<number | null>(null)
+  const touchLastY = useRef<number | null>(null)
   const reducedMotion = prefersReducedMotion()
+  const isMobile = typeof window !== 'undefined' && typeof window.matchMedia === 'function'
+    ? window.matchMedia('(max-width: 768px)').matches
+    : false
 
   useEffect(() => {
     lineProgressRef.current = lineProgress
@@ -46,8 +50,10 @@ export default function TravellingFromLondonScene({ lang, onNavigateBackward, on
     let velocity = 0
     let current = lineProgressRef.current
     const tailPhase = clamp((easedTarget - 0.78) / 0.22)
-    const stiffness = 0.115 - tailPhase * 0.03
-    const damping = 0.8 + tailPhase * 0.1
+    const stiffnessBase = isMobile ? 0.17 : 0.115
+    const dampingBase = isMobile ? 0.72 : 0.8
+    const stiffness = stiffnessBase - tailPhase * (isMobile ? 0.02 : 0.03)
+    const damping = dampingBase + tailPhase * (isMobile ? 0.08 : 0.1)
 
     const tick = () => {
       const displacement = easedTarget - current
@@ -64,7 +70,7 @@ export default function TravellingFromLondonScene({ lang, onNavigateBackward, on
 
     frame = window.requestAnimationFrame(tick)
     return () => window.cancelAnimationFrame(frame)
-  }, [easedTarget, reducedMotion])
+  }, [easedTarget, reducedMotion, isMobile])
 
   const connectorProgress = easeInOutSine(mapRange(lineProgress, 0, 0.42))
   const frameProgress = easeInOutSine(mapRange(lineProgress, 0.3, 0.86))
@@ -80,18 +86,20 @@ export default function TravellingFromLondonScene({ lang, onNavigateBackward, on
   const taxi4 = resolveLondonText(lang, 'taxi4')
   const taxiLocationLabel = resolveLondonText(lang, 'taxiLocationLabel')
 
-  const updateProgress = (delta: number) => {
+  const updateProgress = (delta: number, allowNavigate = true) => {
     setProgress((prev) => {
       const next = clamp(prev + delta)
-      if (delta < 0 && prev <= 0.01) onNavigateBackward()
-      if (delta > 0 && prev >= 0.99) onNavigateForward()
+      if (allowNavigate && delta < 0 && prev <= 0.01) onNavigateBackward()
+      if (allowNavigate && delta > 0 && prev >= 0.99) onNavigateForward()
       return next
     })
   }
 
   const onWheel = (event: WheelEvent<HTMLElement>) => {
     event.preventDefault()
-    updateProgress(clamp(event.deltaY * 0.0015, -0.1, 0.1))
+    const wheelScale = isMobile ? 0.0024 : 0.0015
+    const wheelClamp = isMobile ? 0.14 : 0.1
+    updateProgress(clamp(event.deltaY * wheelScale, -wheelClamp, wheelClamp))
   }
 
   const onKeyDown = (event: KeyboardEvent<HTMLElement>) => {
@@ -112,20 +120,36 @@ export default function TravellingFromLondonScene({ lang, onNavigateBackward, on
       onWheel={onWheel}
       onKeyDown={onKeyDown}
       onTouchStart={(event) => {
-        touchStartY.current = event.changedTouches[0]?.clientY ?? null
+        const y = event.changedTouches[0]?.clientY ?? null
+        touchStartY.current = y
+        touchLastY.current = y
+      }}
+      onTouchMove={(event) => {
+        const current = event.changedTouches[0]?.clientY
+        const last = touchLastY.current
+        if (typeof current !== 'number' || last === null) return
+        const delta = last - current
+        touchLastY.current = current
+        if (Math.abs(delta) < 1.5) return
+        const moveScale = isMobile ? 0.0042 : 0.003
+        updateProgress(clamp(delta * moveScale, -0.08, 0.08), false)
       }}
       onTouchEnd={(event) => {
         const start = touchStartY.current
         const end = event.changedTouches[0]?.clientY
         touchStartY.current = null
+        touchLastY.current = null
         if (start === null || typeof end !== 'number') return
         const delta = start - end
-        if (Math.abs(delta) < 16) return
-        updateProgress(clamp(delta * 0.0024, -0.12, 0.12))
+        const minSwipe = isMobile ? 10 : 16
+        if (Math.abs(delta) < minSwipe) return
+        const endScale = isMobile ? 0.0032 : 0.0024
+        updateProgress(clamp(delta * endScale, -0.12, 0.12))
       }}
       tabIndex={0}
     >
       <section className="london-shell">
+        <img className="london-peach-sleep" src="/images/London/PeachSleep.png" alt="" aria-hidden="true" />
         <div className="london-connector-line" style={{ transform: `scaleY(${connectorProgress})` }} />
 
         <div className="london-gif-frame-wrap">
