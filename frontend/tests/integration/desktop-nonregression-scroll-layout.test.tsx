@@ -63,5 +63,18 @@ describe('desktop non-regression story controls', () => {
     fireEvent.wheel(screen.getByTestId('story-page'), { deltaY: 100 })
     expect(screen.getByTestId('story-page')).toHaveAttribute('data-slug', 'facing-the-morning')
   })
-})
 
+  it('keeps the intro left and right composition groups on desktop', async () => {
+    mockMatchMediaDesktop()
+    renderAt('/en/intro')
+
+    const leftColumn = await screen.findByTestId('intro-left-column')
+    const rightColumn = screen.getByTestId('intro-right-column')
+
+    expect(leftColumn).toContainElement(screen.getByRole('link', { name: 'Continue' }))
+    expect(leftColumn).toContainElement(screen.getByTestId('intro-date-image'))
+    expect(rightColumn.querySelector('.intro-rings-image')).not.toBeNull()
+    expect(rightColumn.querySelector('.intro-details-image')).not.toBeNull()
+    expect(leftColumn.compareDocumentPosition(rightColumn) & Node.DOCUMENT_POSITION_FOLLOWING).not.toBe(0)
+  })
+})

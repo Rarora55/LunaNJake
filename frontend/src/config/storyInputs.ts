@@ -12,11 +12,11 @@ export const BACKWARD_INPUTS = ['wheel-up', 'swipe-down', 'ArrowUp', 'PageUp'] a
 export const FLOW_FALLBACK_LANG: Lang = 'en'
 
 export function firstStoryPath(lang: Lang): string {
-  return `/${lang}/intro`
+  return `/${lang}/story/the-first-time`
 }
 
 export function sheSaidYesPath(lang: Lang): string {
-  return `/${lang}/LunaNJake`
+  return `/${lang}/married`
 }
 
 export function canonicalIntroPath(lang: Lang): string {

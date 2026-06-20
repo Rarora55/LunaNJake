@@ -1,14 +1,17 @@
 import { type KeyboardEvent, type WheelEvent, useRef } from 'react'
+import { Link } from 'react-router-dom'
 import { canTriggerNavigation, resolveDirectionFromKey, resolveDirectionFromWheel } from '../story/navigationController'
 import './LunaNJakeScene.css'
 
 type Props = {
+  introPath: string
+  introLabel: string
   onNavigateBackward: () => void
   onNavigateForward: () => void
   testId?: string
 }
 
-export default function LunaNJakeScene({ onNavigateBackward, onNavigateForward, testId }: Props) {
+export default function LunaNJakeScene({ introPath, introLabel, onNavigateBackward, onNavigateForward, testId }: Props) {
   const lastTriggerMs = useRef(0)
   const touchStartY = useRef<number | null>(null)
 
@@ -63,6 +66,16 @@ export default function LunaNJakeScene({ onNavigateBackward, onNavigateForward, 
         </h1>
         <p className="lnj-subtitle">Monday, 31st of May 2027</p>
         <p className="lnj-subtitle">Save the date!</p>
+        <Link
+          className="lnj-return"
+          to={introPath}
+          aria-label={introLabel}
+          onKeyDown={(event) => event.stopPropagation()}
+        >
+          <span className="lnj-sr-only">{introLabel}</span>
+          <img className="lnj-return-image lnj-return-image--default" src="/images/Home2/Buttom2.png" alt="" aria-hidden="true" />
+          <img className="lnj-return-image lnj-return-image--hover" src="/images/Home2/Buttom2H.png" alt="" aria-hidden="true" />
+        </Link>
         <img className="lnj-image" src="/images/End/LNJ.png" alt="Luna and Jake illustration" />
       </section>
     </main>

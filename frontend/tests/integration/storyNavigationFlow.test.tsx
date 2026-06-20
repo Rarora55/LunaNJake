@@ -12,6 +12,13 @@ function renderAt(path: string) {
 }
 
 describe('story navigation flow', () => {
+  it('keeps intro continue navigation wired to the same-language timeline route', async () => {
+    renderAt('/en/intro')
+
+    fireEvent.click(await screen.findByRole('link', { name: 'Continue' }))
+    expect(await screen.findByTestId('timeline-section')).toBeInTheDocument()
+  })
+
   it('moves between adjacent steps with keyboard inputs', async () => {
     renderAt('/en/story/the-first-time')
     const page = await screen.findByTestId('story-page')

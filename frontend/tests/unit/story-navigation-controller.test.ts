@@ -8,7 +8,7 @@ describe('story navigation controller bounds and gating', () => {
   })
 
   it('keeps backward clamp at first step and handoff from last step', () => {
-    expect(resolveStoryNavigation('en', 'the-first-time', 'backward').nextPath).toBe('/en/intro')
+    expect(resolveStoryNavigation('en', 'the-first-time', 'backward').nextPath).toBe('/en/story/the-first-time')
     expect(resolveStoryNavigation('en', 'she-was-not-wrong', 'forward').nextPath).toBe('/en/married')
   })
 })

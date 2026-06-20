@@ -14,6 +14,7 @@ type Props = {
 
 export default function AddressIntroScene({ lang, onNavigateBackward, onNavigateForward, testId }: Props) {
   const [progress, setProgress] = useState(0)
+  const progressRef = useRef(0)
   const touchStartY = useRef<number | null>(null)
   const touchLastY = useRef<number | null>(null)
   const lastNavMs = useRef(0)
@@ -37,18 +38,18 @@ export default function AddressIntroScene({ lang, onNavigateBackward, onNavigate
   }
 
   const updateProgress = (delta: number, allowNavigate = true) => {
-    setProgress((prev) => {
-      const next = clamp(prev + delta)
-      if (allowNavigate && delta < 0 && prev <= 0.01) {
-        tryNavigate('backward')
-        return prev
-      }
-      if (allowNavigate && delta > 0 && prev >= 0.99) {
-        tryNavigate('forward')
-        return prev
-      }
-      return next
-    })
+    const prev = progressRef.current
+    if (allowNavigate && delta < 0 && prev <= 0.01) {
+      tryNavigate('backward')
+      return
+    }
+    if (allowNavigate && delta > 0 && prev >= 0.99) {
+      tryNavigate('forward')
+      return
+    }
+    const next = clamp(prev + delta)
+    progressRef.current = next
+    setProgress(next)
   }
 
   const onWheel = (event: WheelEvent<HTMLElement>) => {

@@ -15,7 +15,6 @@ type RecommendationStyle = CSSProperties & {
   '--group-top'?: string
   '--group-rotation'?: string
   '--group-x-offset'?: string
-  '--item-image-size'?: string
   '--item-text-width'?: string
 }
 
@@ -55,13 +54,28 @@ export default function Recommendation({ lang, backPath, nextPath }: Recommendat
 
   const desktopBoardHeight = recommendationItems.reduce((maxHeight, item, index) => {
     const itemTop = 180 + index * 220 + item.yOffset
-    const itemHeight = Math.max(item.imageSize + 60, 210)
+    const paragraphCount = item.paragraphs?.length ?? 0
+    const taxiCount = item.taxis?.length ?? 0
+    const textHeight = paragraphCount * 140 + taxiCount * 72
+    const itemHeight = Math.max(textHeight, 260)
     return Math.max(maxHeight, itemTop + itemHeight)
   }, 0)
 
   return (
     <section ref={sectionRef} className="recommendation-section" data-testid="recommendation-section">
       <div className="recommendation-shell">
+        <img
+          className="recommendation-herb recommendation-herb--left"
+          src="/images/Home2/herbs.png"
+          alt=""
+          aria-hidden="true"
+        />
+        <img
+          className="recommendation-herb recommendation-herb--right"
+          src="/images/Home2/herbs.png"
+          alt=""
+          aria-hidden="true"
+        />
         <header className={`recommendation-header ${hasEntered ? 'is-visible' : ''}`}>
           <h1 className="recommendation-title">Recommendations</h1>
         </header>
@@ -79,7 +93,6 @@ export default function Recommendation({ lang, backPath, nextPath }: Recommendat
               '--group-top': `${180 + index * 220 + item.yOffset}px`,
               '--group-rotation': `${item.rotation}deg`,
               '--group-x-offset': `${item.xOffset}px`,
-              '--item-image-size': `${item.imageSize}px`,
               '--item-text-width': `${item.textWidth}px`,
             }
 
@@ -97,14 +110,24 @@ export default function Recommendation({ lang, backPath, nextPath }: Recommendat
                   {item.number}
                 </span>
                 <div className="recommendation-copy">
-                  <p className="recommendation-text">{item.text}</p>
-                  <img
-                    className="recommendation-image"
-                    src={item.image}
-                    alt=""
-                    loading="lazy"
-                    decoding="async"
-                  />
+                  <div className="recommendation-content">
+                    <h2 className="recommendation-item-title">{item.title}</h2>
+                    {item.paragraphs?.map((paragraph) => (
+                      <p key={paragraph} className="recommendation-text">
+                        {paragraph}
+                      </p>
+                    ))}
+                    {item.taxis ? (
+                      <dl className="recommendation-taxi-list">
+                        {item.taxis.map((taxi) => (
+                          <div key={taxi.company} className="recommendation-taxi-item">
+                            <dt className="recommendation-taxi-company">{taxi.company}</dt>
+                            <dd className="recommendation-taxi-phone">{taxi.phone}</dd>
+                          </div>
+                        ))}
+                      </dl>
+                    ) : null}
+                  </div>
                 </div>
               </article>
             )

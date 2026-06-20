@@ -1,9 +1,16 @@
-import { useMemo, useState, type FormEvent } from 'react'
+import { useState, type FormEvent } from 'react'
 import { Link, Navigate, useLocation, useParams } from 'react-router-dom'
 import type { Lang } from '../config/storySequence'
+import {
+  hasValidationErrors,
+  submitRsvp,
+  validateRsvpForm,
+  type AttendanceAnswer,
+  type PlusOneAnswer,
+  type RsvpValidationErrors,
+} from '../lib/rsvpSubmission'
 import './RsvpPage.css'
 
-type PlusOneAnswer = 'yes' | 'no' | ''
 type RsvpNavState = { fromRsvpCta?: boolean }
 
 function normalizeLang(value: string | undefined): Lang {
@@ -18,19 +25,15 @@ export default function RsvpPage() {
   const isProtectedAccess = navState.fromRsvpCta === true
 
   const [fullName, setFullName] = useState('')
+  const [isAttending, setIsAttending] = useState<AttendanceAnswer>('')
   const [plusOne, setPlusOne] = useState<PlusOneAnswer>('')
   const [plusOneName, setPlusOneName] = useState('')
   const [isSubmitting, setIsSubmitting] = useState(false)
+  const [errors, setErrors] = useState<RsvpValidationErrors>({})
   const [status, setStatus] = useState<{ type: 'idle' | 'success' | 'error'; message: string }>({ type: 'idle', message: '' })
 
   const needsPlusOneName = plusOne === 'yes'
   const backToConfirmationLabel = lang === 'it' ? 'Torna alla conferma' : 'Back to confirmation'
-  const canSubmit = useMemo(() => {
-    if (!fullName.trim()) return false
-    if (!plusOne) return false
-    if (needsPlusOneName && !plusOneName.trim()) return false
-    return true
-  }, [fullName, needsPlusOneName, plusOne, plusOneName])
 
   if (!isProtectedAccess) {
     return <Navigate to={`/${lang}/are-you-coming`} replace />
@@ -38,40 +41,43 @@ export default function RsvpPage() {
 
   const onSubmit = async (event: FormEvent<HTMLFormElement>) => {
     event.preventDefault()
-    if (!canSubmit || isSubmitting) return
+    if (isSubmitting) return
+
+    const nextErrors = validateRsvpForm({
+      fullName,
+      isAttending,
+      plusOne,
+      plusOneName,
+    })
+
+    setErrors(nextErrors)
+    if (hasValidationErrors(nextErrors)) {
+      setStatus({ type: 'error', message: 'Please complete the required fields before submitting.' })
+      return
+    }
+
     setIsSubmitting(true)
     setStatus({ type: 'idle', message: '' })
 
     try {
-      const payload = {
-        fullName: fullName.trim(),
-        comingWithPlusOne: plusOne === 'yes' ? 'Yes' : 'No',
-        plusOneFullName: needsPlusOneName ? plusOneName.trim() : '',
-      }
-
-      const response = await fetch('https://formsubmit.co/ajax/ramwill1991@gmail.com', {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json', Accept: 'application/json' },
-        body: JSON.stringify({
-          _subject: `Wedding RSVP - ${payload.fullName}`,
-          _template: 'table',
-          _captcha: 'false',
-          'Guest full name': payload.fullName,
-          'Coming with +1': payload.comingWithPlusOne,
-          ...(payload.plusOneFullName ? { '+1 full name': payload.plusOneFullName } : {}),
-        }),
+      await submitRsvp({
+        fullName,
+        isAttending,
+        plusOne,
+        plusOneName,
       })
 
-      if (!response.ok) {
-        throw new Error(`RSVP request failed with status ${response.status}`)
-      }
-
-      setStatus({ type: 'success', message: 'Thank you. Your RSVP has been sent successfully.' })
+      setStatus({ type: 'success', message: 'Thank you. Your RSVP has been submitted successfully.' })
       setFullName('')
+      setIsAttending('')
       setPlusOne('')
       setPlusOneName('')
+      setErrors({})
     } catch {
-      setStatus({ type: 'error', message: 'Sorry, we could not send your RSVP right now. Please try again.' })
+      setStatus({
+        type: 'error',
+        message: 'Sorry, we could not submit your RSVP right now. Please try again.',
+      })
     } finally {
       setIsSubmitting(false)
     }
@@ -80,27 +86,93 @@ export default function RsvpPage() {
   return (
     <main className="rsvp-page">
       <section className="rsvp-shell" aria-labelledby="rsvp-title">
-        <Link to={`/${lang}/confirmation`} className="rsvp-back-link">
-          {backToConfirmationLabel}
-        </Link>
-        <h1 id="rsvp-title">RSVP</h1>
-        <p className="rsvp-intro">Please confirm your attendance.</p>
+        <header className="rsvp-shell-header">
+          <Link to={`/${lang}/confirmation`} className="rsvp-back-link">
+            {backToConfirmationLabel}
+          </Link>
+          <h1 id="rsvp-title" className="rsvp-title">RSVP</h1>
+          <p className="rsvp-intro">Please confirm your attendance.</p>
+        </header>
 
         <form className="rsvp-form" onSubmit={onSubmit} noValidate>
           <label htmlFor="rsvp-full-name">Full Name</label>
-          <input id="rsvp-full-name" name="fullName" type="text" required value={fullName} onChange={(event) => setFullName(event.target.value)} />
+          <input
+            id="rsvp-full-name"
+            name="fullName"
+            type="text"
+            required
+            aria-invalid={errors.fullName ? 'true' : 'false'}
+            aria-describedby={errors.fullName ? 'rsvp-full-name-error' : undefined}
+            value={fullName}
+            onChange={(event) => setFullName(event.target.value)}
+          />
+          {errors.fullName ? (
+            <p id="rsvp-full-name-error" className="rsvp-field-error" role="alert">
+              {errors.fullName}
+            </p>
+          ) : null}
+
+          <fieldset className="rsvp-fieldset">
+            <legend>Will you be attending?</legend>
+            <label className="rsvp-radio-label">
+              <input
+                type="radio"
+                name="isAttending"
+                value="yes"
+                required
+                checked={isAttending === 'yes'}
+                onChange={() => setIsAttending('yes')}
+              />
+              Yes
+            </label>
+            <label className="rsvp-radio-label">
+              <input
+                type="radio"
+                name="isAttending"
+                value="no"
+                required
+                checked={isAttending === 'no'}
+                onChange={() => setIsAttending('no')}
+              />
+              No
+            </label>
+          </fieldset>
+          {errors.isAttending ? (
+            <p className="rsvp-field-error" role="alert">
+              {errors.isAttending}
+            </p>
+          ) : null}
 
           <fieldset className="rsvp-fieldset">
             <legend>Are you coming with a +1?</legend>
             <label className="rsvp-radio-label">
-              <input type="radio" name="plusOne" value="yes" required checked={plusOne === 'yes'} onChange={() => setPlusOne('yes')} />
+              <input
+                type="radio"
+                name="plusOne"
+                value="yes"
+                required
+                checked={plusOne === 'yes'}
+                onChange={() => setPlusOne('yes')}
+              />
               Yes
             </label>
             <label className="rsvp-radio-label">
-              <input type="radio" name="plusOne" value="no" required checked={plusOne === 'no'} onChange={() => setPlusOne('no')} />
+              <input
+                type="radio"
+                name="plusOne"
+                value="no"
+                required
+                checked={plusOne === 'no'}
+                onChange={() => setPlusOne('no')}
+              />
               No
             </label>
           </fieldset>
+          {errors.plusOne ? (
+            <p className="rsvp-field-error" role="alert">
+              {errors.plusOne}
+            </p>
+          ) : null}
 
           {needsPlusOneName ? (
             <>
@@ -110,13 +182,20 @@ export default function RsvpPage() {
                 name="plusOneFullName"
                 type="text"
                 required={needsPlusOneName}
+                aria-invalid={errors.plusOneName ? 'true' : 'false'}
+                aria-describedby={errors.plusOneName ? 'rsvp-plus-one-name-error' : undefined}
                 value={plusOneName}
                 onChange={(event) => setPlusOneName(event.target.value)}
               />
+              {errors.plusOneName ? (
+                <p id="rsvp-plus-one-name-error" className="rsvp-field-error" role="alert">
+                  {errors.plusOneName}
+                </p>
+              ) : null}
             </>
           ) : null}
 
-          <button type="submit" disabled={!canSubmit || isSubmitting}>
+          <button className="rsvp-submit" type="submit" disabled={isSubmitting}>
             {isSubmitting ? 'Sending...' : 'Send'}
           </button>
         </form>

@@ -1,6 +1,6 @@
-import { act, fireEvent, render, screen } from '@testing-library/react'
+import { fireEvent, render, screen } from '@testing-library/react'
 import { MemoryRouter } from 'react-router-dom'
-import { afterEach, beforeEach, describe, expect, it, vi } from 'vitest'
+import { describe, expect, it } from 'vitest'
 import { AppRoutes } from '../../src/routing/storyRoutes'
 
 function renderAt(path = '/en/intro') {
@@ -12,20 +12,8 @@ function renderAt(path = '/en/intro') {
 }
 
 describe('timeline route order', () => {
-  beforeEach(() => {
-    vi.useFakeTimers()
-  })
-
-  afterEach(() => {
-    vi.useRealTimers()
-  })
-
   it('reaches timeline immediately after intro continue action', async () => {
     renderAt('/en/intro')
-    fireEvent.wheel(screen.getByTestId('intro-scene'), { deltaY: 220 })
-    act(() => vi.advanceTimersByTime(900))
-    fireEvent.wheel(screen.getByTestId('intro-scene'), { deltaY: 220 })
-    act(() => vi.advanceTimersByTime(900))
     fireEvent.click(screen.getByRole('link', { name: 'Continue' }))
     expect(screen.getByTestId('timeline-section')).toBeInTheDocument()
   })
@@ -41,7 +29,7 @@ describe('timeline route order', () => {
       fireEvent.wheel(screen.getByTestId('timeline-stage'), { deltaY: 260 })
     }
 
-    expect(screen.getByText('17:00 Festa')).toBeInTheDocument()
+    expect(screen.getByText('17:00 Rientro')).toBeInTheDocument()
   })
 
   it('continues from timeline into recommendation, confirmation, colombia, questions, then LunaNJake', async () => {

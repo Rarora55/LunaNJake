@@ -1,4 +1,5 @@
 .confirmation-section {
+  position: relative;
   min-height: 100vh;
   width: 100%;
   display: grid;
@@ -7,6 +8,7 @@
   background:
     radial-gradient(circle at 50% 10%, #faf5ec 0%, #f5eddf 40%, #eee2d0 100%),
     linear-gradient(180deg, rgba(255, 255, 255, 0.24) 0%, rgba(255, 255, 255, 0) 32%);
+  overflow: hidden;
   opacity: 0;
   transition: opacity 520ms ease;
 }
@@ -16,6 +18,7 @@
 }
 
 .confirmation-shell {
+  position: relative;
   width: min(100%, 1180px);
   display: grid;
   grid-template-columns: minmax(0, 1fr) minmax(280px, 0.95fr);
@@ -28,16 +31,40 @@
     transform 480ms ease;
 }
 
+.confirmation-herb {
+  position: absolute;
+  width: clamp(8rem, 16vw, 12rem);
+  height: auto;
+  display: block;
+  object-fit: contain;
+  pointer-events: none;
+  opacity: 0.38;
+  z-index: 0;
+}
+
+.confirmation-herb--left {
+  left: clamp(-1.5rem, -0.8vw, -0.25rem);
+  bottom: clamp(-0.75rem, 1vw, 0.5rem);
+}
+
+.confirmation-herb--right {
+  top: clamp(-0.6rem, 1vw, 0.5rem);
+  right: clamp(-1.35rem, -0.8vw, -0.2rem);
+  opacity: 0.34;
+}
+
 .confirmation-shell.is-visible {
   opacity: 1;
   transform: translateY(0);
 }
 
 .confirmation-copy {
+  position: relative;
   display: grid;
   gap: clamp(1.2rem, 2.5vw, 1.8rem);
   justify-items: start;
   text-align: left;
+  z-index: 1;
 }
 
 .confirmation-title {
@@ -111,9 +138,11 @@
 }
 
 .confirmation-media {
+  position: relative;
   display: flex;
   justify-content: center;
   align-items: center;
+  z-index: 1;
 }
 
 .confirmation-image {
@@ -128,6 +157,10 @@
   .confirmation-shell {
     grid-template-columns: 1fr;
     gap: 1.8rem;
+  }
+
+  .confirmation-herb {
+    width: clamp(6.5rem, 18vw, 9rem);
   }
 
   .confirmation-copy {
@@ -151,6 +184,16 @@
 
   .confirmation-shell {
     gap: 1.4rem;
+  }
+
+  .confirmation-herb--left {
+    left: -0.85rem;
+    bottom: 0;
+  }
+
+  .confirmation-herb--right {
+    top: 0;
+    right: -0.7rem;
   }
 
   .confirmation-copy {

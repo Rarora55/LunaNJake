@@ -33,6 +33,7 @@ const DECORATIVE_DRAWINGS: DecorativeDrawing[] = [
 
 export default function AddressTimelineScene({ lang, onNavigateBackward, onNavigateForward, testId }: Props) {
   const [progress, setProgress] = useState(0)
+  const progressRef = useRef(0)
   const [lineProgress, setLineProgress] = useState(0)
   const lineProgressRef = useRef(0)
   const touchStartY = useRef<number | null>(null)
@@ -85,12 +86,18 @@ export default function AddressTimelineScene({ lang, onNavigateBackward, onNavig
   }, [laggedTarget, reducedMotion, isMobile])
 
   const updateProgress = (delta: number, allowNavigate = true) => {
-    setProgress((prev) => {
-      const next = clamp(prev + delta)
-      if (allowNavigate && delta < 0 && prev <= 0.01) onNavigateBackward()
-      if (allowNavigate && delta > 0 && prev >= 0.99) onNavigateForward()
-      return next
-    })
+    const prev = progressRef.current
+    if (allowNavigate && delta < 0 && prev <= 0.01) {
+      onNavigateBackward()
+      return
+    }
+    if (allowNavigate && delta > 0 && prev >= 0.99) {
+      onNavigateForward()
+      return
+    }
+    const next = clamp(prev + delta)
+    progressRef.current = next
+    setProgress(next)
   }
 
   const onWheel = (event: WheelEvent<HTMLElement>) => {
@@ -164,7 +171,7 @@ export default function AddressTimelineScene({ lang, onNavigateBackward, onNavig
         <div className="timeline-line" style={{ transform: `scaleY(${lineProgress})` }} />
 
         {items.map((item) => {
-          const visible = lineProgress >= item.revealProgress
+          const visible = progress >= item.revealProgress || lineProgress >= item.revealProgress
           if (!visible) return null
           const markerFailed = isFailed(`${item.id}-marker`)
           const iconFailed = isFailed(`${item.id}-icon`)

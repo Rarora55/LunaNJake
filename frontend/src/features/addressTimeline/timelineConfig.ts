@@ -67,8 +67,7 @@ export const TIMELINE_MARKERS: TimelineMarkerConfig[] = [
   { id: 3, x: 34, y: 38, threshold: 0.28, rotation: -5, scale: 0.98 },
   { id: 4, x: 50, y: 69, threshold: 0.43, rotation: 9, scale: 0.92 },
   { id: 5, x: 66, y: 56, threshold: 0.58, rotation: -4, scale: 0.88 },
-  { id: 6, x: 82, y: 68, threshold: 0.75, rotation: 7, scale: 0.94 },
-  { id: 7, x: 94, y: 62, threshold: 0.91, rotation: -6, scale: 0.9 },
+  { id: 6, x: 92, y: 80, threshold: 0.75, rotation: 7, scale: 0.94 },
 ]
 
 const TIMELINE_MARKER_CONTENT: TimelineMarkerContentConfig[] = [
@@ -83,7 +82,7 @@ const TIMELINE_MARKER_CONTENT: TimelineMarkerContentConfig[] = [
   {
     markerId: 2,
     labelKey: 'timelineMarkerCeremony',
-    image: '/images/TimeLine/CasaBoda.png',
+    image: '/images/TimeLine/CasaBoda2.png',
     position: 'bottom',
     xOffset: -50,
     yOffset: 12,
@@ -106,26 +105,18 @@ const TIMELINE_MARKER_CONTENT: TimelineMarkerContentConfig[] = [
   },
   {
     markerId: 5,
-    labelKey: 'timelineMarkerAfterDinner',
-    image: '/images/TimeLine/AfterDinner.png',
+    labelKey: 'timelineMarkerParty',
+    image: '/images/TimeLine/Dance2.png',
     position: 'top',
     xOffset: -40,
     yOffset: -30,
   },
   {
     markerId: 6,
-    labelKey: 'timelineMarkerParty',
-    image: '/images/TimeLine/DanceHall.png',
-    position: 'bottom',
-    xOffset: -40,
-    yOffset: -10,
-  },
-  {
-    markerId: 7,
     labelKey: 'timelineMarkerLeaving',
-    image: '/images/TimeLine/Bus.png',
-    position: 'top',
-    xOffset: -18,
+    image: '/images/TimeLine/CarGoodBye.png',
+    position: 'bottom',
+    xOffset: 80,
     yOffset: -50,
   },
 ]

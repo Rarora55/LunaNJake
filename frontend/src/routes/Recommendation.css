@@ -9,12 +9,38 @@
 }
 
 .recommendation-shell {
+  position: relative;
   width: min(100%, 1440px);
   margin: 0 auto;
   padding: clamp(2.75rem, 7vw, 5rem) clamp(1.1rem, 4vw, 2.6rem) 2.5rem;
+  overflow: hidden;
+}
+
+.recommendation-herb {
+  position: absolute;
+  width: clamp(8rem, 16vw, 12rem);
+  height: auto;
+  display: block;
+  object-fit: contain;
+  pointer-events: none;
+  opacity: 0.42;
+  z-index: 0;
+}
+
+.recommendation-herb--left {
+  left: clamp(-2rem, -1.5vw, -0.5rem);
+  bottom: clamp(3rem, 12vw, 9rem);
+}
+
+.recommendation-herb--right {
+  top: clamp(0.5rem, 2vw, 1.5rem);
+  right: clamp(-1.8rem, -1vw, -0.25rem);
+  transform: scaleX(-1) rotate(10deg);
+  opacity: 0.34;
 }
 
 .recommendation-header {
+  position: relative;
   display: flex;
   justify-content: center;
   opacity: 0;
@@ -43,13 +69,13 @@
   position: relative;
   min-height: var(--board-height);
   margin-top: clamp(2rem, 5vw, 4rem);
+  z-index: 1;
 }
 
 .recommendation-group {
   --group-top: 0px;
   --group-x-offset: 0px;
   --group-rotation: 0deg;
-  --item-image-size: 160px;
   --item-text-width: 220px;
   position: absolute;
   top: var(--group-top);
@@ -93,7 +119,10 @@
 .recommendation-copy {
   display: grid;
   justify-items: start;
-  gap: 0.7rem;
+}
+
+.recommendation-content {
+  width: min(var(--item-text-width), 44vw);
 }
 
 .recommendation-group--right .recommendation-copy {
@@ -101,24 +130,60 @@
   text-align: right;
 }
 
-.recommendation-text {
-  width: min(var(--item-text-width), 42vw);
-  margin: 0;
-  font-size: clamp(1.65rem, 3.1vw, 2.35rem);
-  line-height: 1;
-  color: #16120f;
+.recommendation-group--right .recommendation-content {
+  margin-left: auto;
+}
+
+.recommendation-item-title {
+  margin: 0 0 0.6rem;
+  font-size: clamp(1.9rem, 3.6vw, 2.9rem);
+  line-height: 0.95;
+  font-weight: 400;
+  color: #4C77E6;
   text-wrap: balance;
 }
 
-.recommendation-image {
-  width: var(--item-image-size);
-  height: var(--item-image-size);
-  object-fit: contain;
-  display: block;
-  filter: drop-shadow(0 8px 16px rgba(70, 40, 18, 0.08));
+.recommendation-text {
+  width: 100%;
+  margin: 0;
+  font-size: clamp(1.1rem, 2vw, 1.45rem);
+  line-height: 1.35;
+  color: #16120f;
+  text-wrap: pretty;
+}
+
+.recommendation-text + .recommendation-text {
+  margin-top: 0.85rem;
+}
+
+.recommendation-taxi-list {
+  display: grid;
+  gap: 0.75rem;
+  margin: 0;
+}
+
+.recommendation-taxi-item {
+  display: grid;
+  gap: 0.1rem;
+}
+
+.recommendation-taxi-company,
+.recommendation-taxi-phone {
+  margin: 0;
+  font-size: clamp(1.15rem, 2.1vw, 1.5rem);
+  line-height: 1.2;
+}
+
+.recommendation-taxi-company {
+  font-weight: 700;
+}
+
+.recommendation-taxi-phone {
+  font-style: normal;
 }
 
 .recommendation-nav {
+  position: relative;
   display: flex;
   justify-content: center;
   align-items: center;
@@ -158,6 +223,20 @@
     padding-inline: 1rem;
   }
 
+  .recommendation-herb {
+    width: clamp(6.5rem, 24vw, 8.5rem);
+  }
+
+  .recommendation-herb--left {
+    left: -1.2rem;
+    bottom: 4rem;
+  }
+
+  .recommendation-herb--right {
+    top: 0.5rem;
+    right: -1rem;
+  }
+
   .recommendation-board {
     min-height: auto;
     display: grid;
@@ -190,13 +269,21 @@
   }
 
   .recommendation-text {
-    width: auto;
-    max-width: 15rem;
-    font-size: clamp(1.2rem, 5vw, 1.6rem);
+    max-width: none;
+    font-size: clamp(1rem, 4.2vw, 1.15rem);
   }
 
-  .recommendation-image {
-    width: min(var(--item-image-size), 110px);
-    height: min(var(--item-image-size), 110px);
+  .recommendation-content {
+    width: auto;
+    max-width: min(18rem, 100%);
+  }
+
+  .recommendation-item-title {
+    font-size: clamp(1.5rem, 6vw, 2rem);
+  }
+
+  .recommendation-taxi-company,
+  .recommendation-taxi-phone {
+    font-size: clamp(1rem, 4.3vw, 1.2rem);
   }
 }

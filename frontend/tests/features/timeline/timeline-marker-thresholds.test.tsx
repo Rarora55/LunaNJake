@@ -12,19 +12,20 @@ describe('timeline marker thresholds', () => {
     )
 
     const marker1 = await screen.findByTestId('timeline-marker-1')
-    const marker7 = await screen.findByTestId('timeline-marker-7')
+    const marker6 = await screen.findByTestId('timeline-marker-6')
     const markerContent1 = await screen.findByTestId('timeline-marker-content-1')
-    const markerContent7 = await screen.findByTestId('timeline-marker-content-7')
+    const markerContent6 = await screen.findByTestId('timeline-marker-content-6')
 
     expect(marker1).toHaveAttribute('data-visible', 'false')
-    expect(marker7).toHaveAttribute('data-visible', 'false')
+    expect(marker6).toHaveAttribute('data-visible', 'false')
     expect(markerContent1).toHaveAttribute('data-visible', 'false')
-    expect(markerContent7).toHaveAttribute('data-visible', 'false')
+    expect(markerContent6).toHaveAttribute('data-visible', 'false')
+    expect(screen.queryByTestId('timeline-marker-7')).not.toBeInTheDocument()
 
     fireEvent.wheel(screen.getByTestId('timeline-stage'), { deltaY: 260 })
 
     expect(marker1).toHaveAttribute('data-visible', 'true')
-    expect(marker7).toHaveAttribute('data-visible', 'false')
+    expect(marker6).toHaveAttribute('data-visible', 'false')
     expect(markerContent1).toHaveAttribute('data-visible', 'true')
     expect(screen.getByText('11:00 Bus')).toBeInTheDocument()
 
@@ -32,15 +33,15 @@ describe('timeline marker thresholds', () => {
       fireEvent.wheel(screen.getByTestId('timeline-stage'), { deltaY: 260 })
     }
 
-    expect(marker7).toHaveAttribute('data-visible', 'true')
-    expect(markerContent7).toHaveAttribute('data-visible', 'true')
-    expect(screen.getByText('23:00 Leaving')).toBeInTheDocument()
+    expect(marker6).toHaveAttribute('data-visible', 'true')
+    expect(markerContent6).toHaveAttribute('data-visible', 'true')
+    expect(screen.getByText('17:00 Leaving')).toBeInTheDocument()
 
     for (let i = 0; i < 20; i += 1) {
       fireEvent.wheel(screen.getByTestId('timeline-stage'), { deltaY: -260 })
     }
 
-    expect(marker7).toHaveAttribute('data-visible', 'false')
-    expect(markerContent7).toHaveAttribute('data-visible', 'false')
+    expect(marker6).toHaveAttribute('data-visible', 'false')
+    expect(markerContent6).toHaveAttribute('data-visible', 'false')
   })
 })

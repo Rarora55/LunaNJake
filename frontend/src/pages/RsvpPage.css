@@ -1,33 +1,49 @@
 .rsvp-page {
   min-height: 100vh;
-  padding: clamp(16px, 4vw, 32px);
+  padding: clamp(18px, 4vw, 40px);
   display: grid;
   place-items: center;
-  font-family: "Cormorant Garamond", serif;
+  font-family: 'Cormorant Garamond', serif;
+  color: #4c77e6;
   background:
     radial-gradient(circle at 50% 12%, #f4efe2 0%, #e7dbc3 44%, #d8c7a8 100%),
     repeating-linear-gradient(0deg, rgba(0, 0, 0, 0.03) 0 1px, transparent 1px 5px);
 }
 
 .rsvp-shell {
-  width: min(94vw, 660px);
-  border: 2px solid #111;
-  background: rgba(255, 255, 255, 0.78);
-  padding: clamp(18px, 4vw, 30px);
+  width: min(94vw, 720px);
+  border: 1.5px solid rgba(76, 119, 230, 0.38);
+  border-radius: 2rem;
+  background: rgba(255, 252, 246, 0.8);
+  box-shadow: 0 18px 42px rgba(76, 119, 230, 0.14);
+  padding: clamp(22px, 4vw, 36px);
+  backdrop-filter: blur(3px);
 }
 
-.rsvp-shell h1 {
+.rsvp-shell-header {
+  display: grid;
+  gap: 0.45rem;
+  margin-bottom: 1.4rem;
+}
+
+.rsvp-title {
   margin: 0;
-  font-size: clamp(2rem, 6vw, 3rem);
+  font-family: 'Brittany Signature', 'Amsterdam Four', 'Caveat', cursive;
+  font-size: clamp(2.4rem, 8vw, 5rem);
+  font-weight: 400;
+  line-height: 1;
+  color: #4c77e6;
 }
 
 .rsvp-back-link {
   display: inline-flex;
-  margin-bottom: 14px;
-  color: #111;
+  justify-self: start;
+  color: #4c77e6;
   text-decoration: none;
-  font-size: 1rem;
+  font-size: 0.95rem;
   font-weight: 700;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
 }
 
 .rsvp-back-link:hover,
@@ -37,37 +53,58 @@
 }
 
 .rsvp-intro {
-  margin: 8px 0 18px;
-  font-size: clamp(1.05rem, 2.8vw, 1.3rem);
+  margin: 0;
+  max-width: 32rem;
+  font-size: clamp(1.1rem, 2.8vw, 1.35rem);
+  line-height: 1.45;
+  color: rgba(76, 119, 230, 0.88);
 }
 
 .rsvp-form {
   display: grid;
-  gap: 12px;
+  gap: 0.9rem;
+}
+
+.rsvp-field-error {
+  margin: -0.35rem 0 0;
+  font-size: 0.98rem;
+  font-weight: 700;
+  color: #8a1f24;
 }
 
 .rsvp-form label,
 .rsvp-fieldset legend {
-  font-size: 1.15rem;
+  font-size: 1.1rem;
   font-weight: 700;
+  color: #4c77e6;
 }
 
 .rsvp-form input[type="text"] {
   width: 100%;
-  border: 1px solid #111;
-  border-radius: 0;
-  padding: 10px 12px;
+  border: 1px solid rgba(76, 119, 230, 0.32);
+  border-radius: 1rem;
+  padding: 0.85rem 1rem;
   font: inherit;
   font-size: 1.05rem;
-  background: #fff;
+  color: #213a74;
+  background: rgba(255, 255, 255, 0.9);
+  transition: border-color 140ms ease, box-shadow 140ms ease, background-color 140ms ease;
+}
+
+.rsvp-form input[type="text"]:focus-visible {
+  outline: none;
+  border-color: rgba(76, 119, 230, 0.7);
+  box-shadow: 0 0 0 4px rgba(76, 119, 230, 0.16);
 }
 
 .rsvp-fieldset {
-  border: 1px solid #111;
-  padding: 10px 12px;
+  border: 1px solid rgba(76, 119, 230, 0.25);
+  border-radius: 1.25rem;
+  padding: 0.95rem 1rem;
   margin: 2px 0;
   display: grid;
-  gap: 8px;
+  gap: 0.7rem;
+  background: rgba(255, 255, 255, 0.45);
 }
 
 .rsvp-radio-label {
@@ -76,21 +113,36 @@
   gap: 8px;
   font-size: 1.05rem;
   font-weight: 400;
+  color: #213a74;
 }
 
-.rsvp-form button[type="submit"] {
+.rsvp-submit {
   justify-self: start;
-  padding: 10px 18px;
-  border: 1px solid #111;
-  background: #fdf9ee;
-  border-radius: 0;
+  min-width: 9rem;
+  padding: 0.8rem 1.4rem;
+  border: 1px solid rgba(76, 119, 230, 0.42);
+  background: linear-gradient(180deg, rgba(255, 255, 255, 0.95) 0%, rgba(232, 239, 255, 0.9) 100%);
+  border-radius: 999px;
   font: inherit;
-  font-size: 1.1rem;
+  font-size: 1.05rem;
+  font-weight: 700;
+  color: #4c77e6;
+  cursor: pointer;
+  transition: transform 140ms ease, box-shadow 140ms ease, background-color 140ms ease;
 }
 
-.rsvp-form button[type="submit"]:disabled {
+.rsvp-submit:hover,
+.rsvp-submit:focus-visible {
+  outline: none;
+  transform: translateY(-1px);
+  box-shadow: 0 10px 20px rgba(76, 119, 230, 0.16);
+}
+
+.rsvp-submit:disabled {
   opacity: 0.6;
   cursor: not-allowed;
+  transform: none;
+  box-shadow: none;
 }
 
 .rsvp-status {
@@ -110,5 +162,16 @@
 @media (max-width: 700px) {
   .rsvp-shell {
     width: min(96vw, 560px);
+    border-radius: 1.5rem;
+    padding: 1.2rem 1rem 1.5rem;
+  }
+
+  .rsvp-title {
+    font-size: clamp(2.1rem, 12vw, 3.2rem);
+  }
+
+  .rsvp-submit {
+    width: 100%;
+    justify-self: stretch;
   }
 }

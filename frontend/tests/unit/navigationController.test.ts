@@ -17,7 +17,7 @@ describe('navigation controller', () => {
 
   it('clamps first step and hands off from she-was-not-wrong', () => {
     expect(resolveStoryNavigation('en', 'the-first-time', 'backward').nextPath).toBe('/en/story/the-first-time')
-    expect(resolveStoryNavigation('it', 'she-was-not-wrong', 'forward').nextPath).toBe('/it/she-said-yes')
+    expect(resolveStoryNavigation('it', 'she-was-not-wrong', 'forward').nextPath).toBe('/it/married')
   })
 })
 

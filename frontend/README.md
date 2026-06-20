@@ -1,73 +1,74 @@
-# React + TypeScript + Vite
+# Luna & Jake Frontend
 
-This template provides a minimal setup to get React working in Vite with HMR and some ESLint rules.
+## Vercel deployment
 
-Currently, two official plugins are available:
+This app deploys to Vercel as a static Vite SPA.
 
-- [@vitejs/plugin-react](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react) uses [Oxc](https://oxc.rs)
-- [@vitejs/plugin-react-swc](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react-swc) uses [SWC](https://swc.rs/)
+Project settings:
 
-## React Compiler
-
-The React Compiler is not enabled on this template because of its impact on dev & build performances. To add it, see [this documentation](https://react.dev/learn/react-compiler/installation).
-
-## Expanding the ESLint configuration
-
-If you are developing a production application, we recommend updating the configuration to enable type-aware lint rules:
-
-```js
-export default defineConfig([
-  globalIgnores(['dist']),
-  {
-    files: ['**/*.{ts,tsx}'],
-    extends: [
-      // Other configs...
-
-      // Remove tseslint.configs.recommended and replace with this
-      tseslint.configs.recommendedTypeChecked,
-      // Alternatively, use this for stricter rules
-      tseslint.configs.strictTypeChecked,
-      // Optionally, add this for stylistic rules
-      tseslint.configs.stylisticTypeChecked,
-
-      // Other configs...
-    ],
-    languageOptions: {
-      parserOptions: {
-        project: ['./tsconfig.node.json', './tsconfig.app.json'],
-        tsconfigRootDir: import.meta.dirname,
-      },
-      // other options...
-    },
-  },
-])
+```text
+Framework Preset: Vite
+Build Command: npm run build
+Output Directory: dist
+Install Command: npm install
 ```
 
-You can also install [eslint-plugin-react-x](https://github.com/Rel1cx/eslint-react/tree/main/packages/plugins/eslint-plugin-react-x) and [eslint-plugin-react-dom](https://github.com/Rel1cx/eslint-react/tree/main/packages/plugins/eslint-plugin-react-dom) for React-specific lint rules:
+Required Vercel environment variables:
 
-```js
-// eslint.config.js
-import reactX from 'eslint-plugin-react-x'
-import reactDom from 'eslint-plugin-react-dom'
-
-export default defineConfig([
-  globalIgnores(['dist']),
-  {
-    files: ['**/*.{ts,tsx}'],
-    extends: [
-      // Other configs...
-      // Enable lint rules for React
-      reactX.configs['recommended-typescript'],
-      // Enable lint rules for React DOM
-      reactDom.configs.recommended,
-    ],
-    languageOptions: {
-      parserOptions: {
-        project: ['./tsconfig.node.json', './tsconfig.app.json'],
-        tsconfigRootDir: import.meta.dirname,
-      },
-      // other options...
-    },
-  },
-])
+```bash
+VITE_SUPABASE_URL=https://your-project-id.supabase.co
+VITE_SUPABASE_ANON_KEY=your-supabase-anon-key
+VITE_RSVP_EMAIL_NOTIFICATIONS_ENABLED=false
 ```
+
+Notes:
+
+1. `vercel.json` rewrites client-side routes like `/en/intro` and `/it/rsvp` to `index.html`, so React Router can resolve them.
+2. `VITE_RSVP_EMAIL_NOTIFICATIONS_ENABLED` is optional. Leave it `false` unless the Supabase Edge Function is deployed.
+3. Vercel should use Node `20.19+` because the project builds with Vite 8.
+
+## RSVP Supabase setup
+
+The RSVP form saves submissions into Supabase. Email notifications are optional and can be enabled later with a Supabase Edge Function.
+
+### Frontend environment
+
+Create a local `.env` file from `.env.example`:
+
+```bash
+VITE_SUPABASE_URL=https://your-project-id.supabase.co
+VITE_SUPABASE_ANON_KEY=your-supabase-anon-key
+VITE_RSVP_EMAIL_NOTIFICATIONS_ENABLED=false
+```
+
+### Database migration
+
+Apply:
+
+`supabase/migrations/20260617_create_rsvp_confirmations.sql`
+
+This creates `public.rsvp_confirmations` with the required fields and an anonymous insert policy for the frontend.
+
+### Optional Edge Function
+
+Deploy:
+
+`supabase/functions/rsvp-confirmation-email/index.ts`
+
+Required Supabase Edge Function secrets:
+
+```bash
+RESEND_API_KEY=your-resend-api-key
+RSVP_FROM_EMAIL=no-reply@your-domain.com
+RSVP_NOTIFICATION_EMAIL=ramwill1991@gmail.com
+```
+
+The email subject is:
+
+`New RSVP Confirmation - Luna & Jake Wedding`
+
+The frontend flow is:
+
+1. Insert RSVP into `rsvp_confirmations`
+2. If `VITE_RSVP_EMAIL_NOTIFICATIONS_ENABLED=true`, invoke the `rsvp-confirmation-email` Edge Function
+3. Show success or error feedback in the form

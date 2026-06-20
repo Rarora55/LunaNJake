@@ -34,6 +34,18 @@ export default function Confirmation({ lang, backPath, nextPath }: ConfirmationP
       className={`confirmation-section ${hasEntered ? 'is-visible' : ''}`}
       data-testid="confirmation-section"
     >
+      <img
+        className="confirmation-herb confirmation-herb--left"
+        src="/images/Home2/herbs2.png"
+        alt=""
+        aria-hidden="true"
+      />
+      <img
+        className="confirmation-herb confirmation-herb--right"
+        src="/images/Home2/herbs3.png"
+        alt=""
+        aria-hidden="true"
+      />
       <div
         className={`confirmation-shell ${hasEntered ? 'is-visible' : ''}`}
         data-testid="confirmation-shell"

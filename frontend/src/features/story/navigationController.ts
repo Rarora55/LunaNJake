@@ -38,7 +38,7 @@ export function resolveStoryNavigation(lang: Lang, currentSlug: string, directio
 
   if (direction === 'backward') {
     if (currentSlug === FIRST_STORY_SLUG) {
-      return { nextPath: canonicalIntroPath(lang), direction }
+      return { nextPath: firstStoryPath(lang), direction }
     }
     const prevSlug = STORY_SEQUENCE[idx].previousSlug ?? FIRST_STORY_SLUG
     return { nextPath: `/${lang}/story/${prevSlug}`, direction }
@@ -53,7 +53,7 @@ export function resolveStoryNavigation(lang: Lang, currentSlug: string, directio
 }
 
 export function resolveInvalidStorySlug(lang: Lang): string {
-  return firstStoryPath(lang)
+  return canonicalIntroPath(lang)
 }
 
 

@@ -54,4 +54,19 @@ describe('mobile layout proportions behavior', () => {
     expect(copy.compareDocumentPosition(image) & Node.DOCUMENT_POSITION_FOLLOWING).not.toBe(0)
     expect(image).toHaveAttribute('src', '/images/Confirmation/Together.png')
   })
+
+  it('keeps the intro date block readable and ordered on mobile', async () => {
+    mockMatchMediaMobile()
+    renderAt('/en/intro')
+
+    const leftColumn = await screen.findByTestId('intro-left-column')
+    const dateImage = screen.getByTestId('intro-date-image')
+    const timer = screen.getByRole('timer')
+    const rightColumn = screen.getByTestId('intro-right-column')
+
+    expect(leftColumn).toContainElement(dateImage)
+    expect(leftColumn).toContainElement(timer)
+    expect(dateImage).toHaveAttribute('src', '/images/Home2/Monday.png')
+    expect(leftColumn.compareDocumentPosition(rightColumn) & Node.DOCUMENT_POSITION_FOLLOWING).not.toBe(0)
+  })
 })

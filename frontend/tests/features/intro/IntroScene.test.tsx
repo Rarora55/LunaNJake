@@ -1,6 +1,6 @@
-import { act, fireEvent, render, screen } from '@testing-library/react'
+import { fireEvent, render, screen } from '@testing-library/react'
 import { MemoryRouter } from 'react-router-dom'
-import { afterEach, beforeEach, describe, expect, it, vi } from 'vitest'
+import { describe, expect, it } from 'vitest'
 import { AppRoutes } from '../../../src/routing/storyRoutes'
 
 function renderIntro(path = '/en/intro') {
@@ -12,56 +12,40 @@ function renderIntro(path = '/en/intro') {
 }
 
 describe('IntroScene', () => {
-  beforeEach(() => {
-    vi.useFakeTimers()
-  })
-
-  afterEach(() => {
-    vi.useRealTimers()
-  })
-
-  it('advances and reverses steps using scroll, showing only one block at a time', async () => {
+  it('renders only the final intro scene immediately', async () => {
     renderIntro('/en/intro')
 
-    expect(screen.getByText(/The first time they saw each other/i)).toBeInTheDocument()
-    expect(screen.queryByText('She was not wrong...')).not.toBeInTheDocument()
-
-    fireEvent.wheel(screen.getByTestId('intro-scene'), { deltaY: 200 })
-    act(() => vi.advanceTimersByTime(900))
-    expect(screen.getByText('She was not wrong...')).toBeInTheDocument()
+    expect(screen.getByRole('link', { name: 'Continue' })).toBeInTheDocument()
+    expect(screen.getByAltText('Monday 31 May 2027')).toBeInTheDocument()
     expect(screen.queryByText(/The first time they saw each other/i)).not.toBeInTheDocument()
-
-    fireEvent.wheel(screen.getByTestId('intro-scene'), { deltaY: -200 })
-    act(() => vi.advanceTimersByTime(900))
-    expect(screen.getByText(/The first time they saw each other/i)).toBeInTheDocument()
     expect(screen.queryByText('She was not wrong...')).not.toBeInTheDocument()
   })
 
-  it('reaches final step via scroll and exposes continue CTA', async () => {
+  it('exposes the continue CTA on first render', async () => {
     renderIntro('/en/intro')
-
-    fireEvent.wheel(screen.getByTestId('intro-scene'), { deltaY: 200 })
-    act(() => vi.advanceTimersByTime(900))
-    fireEvent.wheel(screen.getByTestId('intro-scene'), { deltaY: 200 })
-    act(() => vi.advanceTimersByTime(900))
-
     expect(screen.getByText('Luna')).toBeInTheDocument()
     expect(screen.getByText('Jake')).toBeInTheDocument()
     expect(screen.getByText('&')).toBeInTheDocument()
     expect(screen.getByRole('link', { name: 'Continue' })).toBeInTheDocument()
   })
 
-  it('navigates to same-language timeline route from continue CTA', async () => {
+  it('renders the date artwork with a four-part countdown block', async () => {
+    renderIntro('/en/intro')
+
+    expect(screen.getByTestId('intro-date-block')).toBeInTheDocument()
+    expect(screen.getByTestId('intro-date-image')).toHaveAttribute('src', '/images/Home2/Monday.png')
+    expect(screen.getByRole('timer')).toBeInTheDocument()
+    expect(screen.getByText('Days')).toBeInTheDocument()
+    expect(screen.getByText('Hours')).toBeInTheDocument()
+    expect(screen.getByText('Minutes')).toBeInTheDocument()
+    expect(screen.getByText('Seconds')).toBeInTheDocument()
+    expect(screen.queryByText('31 May 2027')).not.toBeInTheDocument()
+  })
+
+  it('navigates to same-language timeline route from continue CTA without prior scroll', async () => {
     renderIntro('/it/intro')
 
-    fireEvent.wheel(screen.getByTestId('intro-scene'), { deltaY: 200 })
-    act(() => vi.advanceTimersByTime(900))
-    fireEvent.wheel(screen.getByTestId('intro-scene'), { deltaY: 200 })
-    act(() => vi.advanceTimersByTime(900))
-
-    act(() => {
-      fireEvent.click(screen.getByRole('link', { name: 'Continua' }))
-    })
+    fireEvent.click(screen.getByRole('link', { name: 'Continua' }))
 
     expect(screen.getByTestId('timeline-section')).toBeInTheDocument()
   })

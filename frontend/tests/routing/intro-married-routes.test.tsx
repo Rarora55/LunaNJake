@@ -45,4 +45,10 @@ describe('intro-married routes', () => {
     fireEvent.click(screen.getByRole('button', { name: 'Italiano' }))
     expect(await screen.findByTestId('intro-scene')).toBeInTheDocument()
   })
+
+  it('returns from LunaNJake to intro through the visible CTA', async () => {
+    renderAt('/it/LunaNJake')
+    fireEvent.click(await screen.findByRole('link', { name: "Torna all'inizio" }))
+    expect(await screen.findByTestId('intro-scene')).toBeInTheDocument()
+  })
 })

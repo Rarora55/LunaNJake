@@ -186,12 +186,12 @@ export default function SheSaidYesMarriedScene({ title, entrySource = 'other', r
     >
       <h1 className="scene-heading">{title}</h1>
       <header className="she-said-yes-header" aria-label="Wedding heading" style={{ opacity: textReveal }}>
-        <h2 className="she-said-yes-title">
+        <div className="she-said-yes-title" role="presentation">
           <span className="she-title-luna">
             <span className="she-title-l-letter">L</span>una
           </span>{' '}
           &amp; Jake
-        </h2>
+        </div>
         <p className="she-said-yes-top-date">{WEDDING_DATE_LABEL}</p>
         <Link className="she-said-yes-rsvp" to={rsvpPath} state={{ fromRsvpCta: true }} aria-label="Open RSVP form">
           <img className="she-said-yes-rsvp-image default" src="/images/Married/FNoHover.png" alt="" aria-hidden="true" />
